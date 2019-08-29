@@ -40,6 +40,21 @@ const printr = async (pixels: Pixels): Promise<void> => {
     const image = new escpos.Image(pixels);
 
     device.open(() => {
+      // via: https://www.sparkfun.com/datasheets/Components/General/Driver%20board.pdf
+      // Set “max heating dots”,”heating time”, “heating interval”
+      // n1 = 0-255 Max printing dots，Unit(8dots)，Default:7(64 dots)
+      // n2 = 3-255 Heating time，Unit(10us),Default:80(800us)
+      // n3 = 0-255 Heating interval,Unit(10us)，Default:2(20us)
+      // The  more  max  heting  dots,  the  more  peak  current  will  cost when
+      // printing, the faster printing speed. The max heating dots is 8*(n1+1)
+      // The more heating time, the more density , but the slower printing speed.
+      // If heating time is too short, blank page may occur.
+      // The  more  heating  interval,  the  more  clear,  but  the  slower printingspeed
+      // printer.buffer.write('\x1b\x37');
+      // printer.buffer.writeUInt8(127); // maxPrintingDots, default 7
+      // printer.buffer.writeUInt8(127); // heatingTime, default 80
+      // printer.buffer.writeUInt8(127); // heatingInterval, default 2
+
       printer
         .newLine()
         .raster(image)
