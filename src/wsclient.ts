@@ -4,7 +4,10 @@ import * as pf from './protocol_fragments';
 import decoder from './decoder';
 import thermalise from './thermalise';
 
+// const uri = 'wss://165.227.233.168:443/api/v1/connection';
 const uri = 'ws://165.227.233.168/api/v1/connection';
+// const uri = 'wss://device.li:443/api/v1/connection';
+// const uri = 'ws://device.li/api/v1/connection';
 
 const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
 const printerData = fs.readFileSync(printerDataPath).toString();
@@ -23,6 +26,8 @@ class State {
 
 export default () => {
   const ws = new WebSocket(uri);
+
+  let heartbeatRef: NodeJS.Timeout | null = null;
 
   console.log('Contacting', uri);
   console.log(printerData);
@@ -122,16 +127,20 @@ export default () => {
       fin: true,
     });
 
-    setInterval(heartbeat, 10_000);
+    heartbeatRef = setInterval(heartbeat, 10_000);
     heartbeat();
   });
 
-  ws.on('close', () => {
-    console.log('close');
+  ws.on('close', (...param) => {
+    console.log('close', { param });
+
+    if (heartbeatRef) {
+      clearInterval(heartbeatRef);
+    }
   });
 
-  ws.on('error', () => {
-    console.log('error');
+  ws.on('error', error => {
+    console.log('error', { error });
   });
 
   ws.on('message', async data => {
@@ -151,8 +160,8 @@ export default () => {
     console.log('pong');
   });
 
-  ws.on('unexpected-response', () => {
-    console.log('unexpected-response');
+  ws.on('unexpected-response', param => {
+    console.log('unexpected-response', { param });
   });
 
   ws.on('upgrade', () => {
