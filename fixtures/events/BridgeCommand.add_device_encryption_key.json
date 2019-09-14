@@ -1,0 +1,13 @@
+{
+  "timestamp": "0",
+  "type": "BridgeCommand",
+  "json_payload": {
+    "params": {
+      "device_address": "11cc0f6aaeb07dad",
+      "encryption_key": "d0M4Ab2eyBNdnNl0NoSLGQ==\\n"
+    },
+    "name": "add_device_encryption_key"
+  },
+  "command_id": 54068,
+  "bridge_address": "b0e38dc177e66000"
+}

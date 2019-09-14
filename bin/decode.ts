@@ -27,11 +27,39 @@ if (path == null) {
   process.exit(1);
 }
 
+// const input = [1, 2, 3, 1000000, 10000, 100000];
+
+// const output = [] as number[];
+
+// input.forEach((item, idx) => {
+//   // evens are white:
+//   const value = idx % 2 == 0 ? 1 : 0;
+
+//   const run = Array(item).fill(value);
+
+//   console.log({ idx, item, value }, output.length + run.length);
+
+//   // doin' some fun hacks, since `output.push(...run);` will overflow on longlonglong runs
+//   const length = output.length;
+//   output.length += run.length;
+
+//   for (let i = 0; i < run.length; i++) {
+//     output[length + i] = run[i];
+//   }
+// });
+
+// console.log(output.length);
+// input.forEach((item, idx) => {});
+
+// return output;
+
 (async () => {
   const string = await readFile(path);
-  const result = await decoder(string.toString('ascii'));
+  const json = JSON.parse(string.toString('utf-8'));
+  const result = await decoder(json.binary_payload);
+
+  console.log('header:', result.header);
 
   await writeFile('out.bmp', result.payload.bitmap);
-
   console.log('wrote to out.bmp');
 })();
