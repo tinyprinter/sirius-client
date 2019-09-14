@@ -18,14 +18,14 @@ import wsclient from '../src/wsclient';
 import Bridge from '../src/bridge';
 import ConsolePrinter from '../src/device/printer/console_printer';
 
-const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
-const printerData = fs.readFileSync(printerDataPath).toString();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+const uri = 'wss://sirius.localhost/api/v1/connection';
+const printerDataPath = 'fixtures/2cadfa9fdad2c46a.printer';
 
-// const uri = 'wss://165.227.233.168:443/api/v1/connection';
-const uri = 'ws://165.227.233.168/api/v1/connection';
-// const uri = 'wss://device.li:443/api/v1/connection';
-// const uri = 'ws://device.li/api/v1/connection';
-// const uri = 'ws://sirius.localhost:5000/api/v1/connection';
+// // const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
+// const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
+
+const printerData = fs.readFileSync(printerDataPath).toString();
 
 console.log('Contacting', uri);
 console.log(printerData);
