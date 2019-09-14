@@ -17,7 +17,13 @@ const bloop = (input: number[]): number[] => {
 
     const run = Array(item).fill(value);
 
-    output.push(...run);
+    // doin' some fun hacks, since `output.push(...run);` will overflow on longlonglong runs
+    const length = output.length;
+    output.length += run.length;
+
+    for (let i = 0; i < run.length; i++) {
+      output[length + i] = run[i];
+    }
   });
 
   return output;

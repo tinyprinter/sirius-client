@@ -4,6 +4,7 @@ import { CommandPayload } from '../types';
 
 import unrle from './unrle';
 
+// There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now. What do we have, if we don't trust blindly?
 export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxPrinterSpeedParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
