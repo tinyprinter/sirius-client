@@ -5,6 +5,7 @@ import wsclient from '../src/wsclient';
 
 import Bridge from '../src/bridge';
 import ConsolePrinter from '../src/device/printer/console-printer';
+import FilesystemPrinter from '../src/device/printer/filesystem-printer';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // const uri = 'ws://localhost:5000/api/v1/connection';
@@ -30,7 +31,8 @@ const bridgeAddress = Math.floor(Math.random() * Math.floor(Math.pow(2, 64)))
   .toString(16)
   .padStart(16, '0');
 
-const device = new ConsolePrinter(deviceAddress);
+// const device = new ConsolePrinter(deviceAddress);
+const device = new FilesystemPrinter(deviceAddress);
 const bridge = new Bridge(bridgeAddress, device);
 
 wsclient(uri, bridge);
