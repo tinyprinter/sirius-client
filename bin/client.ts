@@ -19,8 +19,9 @@ import Bridge from '../src/bridge';
 import ConsolePrinter from '../src/device/printer/console_printer';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-const uri = 'wss://sirius.localhost/api/v1/connection';
-const printerDataPath = 'fixtures/2cadfa9fdad2c46a.printer';
+// const uri = 'ws://localhost:5000/api/v1/connection';
+const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
+const printerDataPath = 'fixtures/fb1f6abb95f9b129.printer';
 
 // // const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
 // const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
