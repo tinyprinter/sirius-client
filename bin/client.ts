@@ -1,28 +1,16 @@
 #!/usr/bin/env node
 
-// import commander from '../src/commander';
-
-// commander(process.argv.slice(2)).then(
-//   () => {
-//     // noop
-//   },
-//   err => {
-//     console.error(err);
-//     process.exit(123);
-//   }
-// );
-
 import fs from 'fs';
 import wsclient from '../src/wsclient';
 
 import Bridge from '../src/bridge';
 import ConsolePrinter from '../src/device/printer/console_printer';
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-const uri = 'wss://sirius.localhost/api/v1/connection';
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// const uri = 'wss://sirius.localhost/api/v1/connection';
 const printerDataPath = 'fixtures/2cadfa9fdad2c46a.printer';
 
-// // const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
+const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
 // const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
 
 const printerData = fs.readFileSync(printerDataPath).toString();
