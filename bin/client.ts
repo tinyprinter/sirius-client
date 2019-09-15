@@ -1,30 +1,16 @@
 #!/usr/bin/env node
 
-// import commander from '../src/commander';
-
-// commander(process.argv.slice(2)).then(
-//   () => {
-//     // noop
-//   },
-//   err => {
-//     console.error(err);
-//     process.exit(123);
-//   }
-// );
-
 import fs from 'fs';
 import wsclient from '../src/wsclient';
 
 import Bridge from '../src/bridge';
-import ConsolePrinter from '../src/device/printer/console_printer';
+import ConsolePrinter from '../src/device/printer/console-printer';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // const uri = 'ws://localhost:5000/api/v1/connection';
 const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
 const printerDataPath = 'fixtures/fb1f6abb95f9b129.printer';
 
-// // const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
-// const printerDataPath = 'fixtures/11cc0f6aaeb07dad.printer';
 
 const printerData = fs.readFileSync(printerDataPath).toString();
 

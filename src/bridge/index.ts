@@ -1,5 +1,5 @@
 import { IDevice } from '../device';
-import * as pf from '../protocol_fragments';
+import * as pf from '../protocol-fragments';
 import assert from 'assert';
 import decoder from '../decoder';
 import { CommandResponse } from '../types';
@@ -30,9 +30,6 @@ export interface IBridge {
   heartbeat(): Promise<CommandResponse>;
   handle(command: Command): Promise<CommandResponse>;
 }
-
-// import decoder from './decoder';
-// import thermalise from './thermalise';
 
 enum BridgeCommandName {
   AddDeviceEncryptionKey = 'add_device_encryption_key',

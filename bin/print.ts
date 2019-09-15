@@ -1,19 +1,8 @@
 #!/usr/bin/env node
 
-// import commander from '../src/commander';
-
-// commander(process.argv.slice(2)).then(
-//   () => {
-//     // noop
-//   },
-//   err => {
-//     console.error(err);
-//     process.exit(123);
-//   }
-// );
+import EscposPrinter from '../src/device/printer/escpos-printer';
 
 import decoder from '../src/decoder';
-import thermalise from '../src/thermalise';
 import fs from 'fs';
 import { promisify } from 'util';
 
@@ -27,9 +16,14 @@ if (path == null) {
   process.exit(1);
 }
 
+const printer = new EscposPrinter('');
+
 (async () => {
   const string = await readFile(path);
-  const result = await decoder(string.toString('ascii'));
+  const json = JSON.parse(string.toString('utf-8'));
+  const result = await decoder(json.binary_payload);
 
-  await thermalise(result.payload.bitmap);
+  printer.handlePayload(result);
+
+  return Promise.resolve();
 })();
