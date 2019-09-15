@@ -4,7 +4,7 @@ import fs from 'fs';
 import wsclient from '../src/wsclient';
 
 import Bridge from '../src/bridge';
-import ConsolePrinter from '../src/device/printer/console_printer';
+import ConsolePrinter from '../src/device/printer/console-printer';
 
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // const uri = 'wss://sirius.localhost/api/v1/connection';
