@@ -3,14 +3,11 @@ import {
   CommandLineStringParameter,
 } from '@microsoft/ts-command-line';
 
-import fs from 'fs';
-import wsclient from '../../wsclient';
-
-import Bridge from '../../bridge';
-import ConsolePrinter from '../../device/printer/console-printer';
+import client from '../../client';
 
 export default class RunAction extends CommandLineAction {
   private _uri?: CommandLineStringParameter;
+  private _printerDataPath?: CommandLineStringParameter;
 
   public constructor() {
     super({
@@ -20,9 +17,13 @@ export default class RunAction extends CommandLineAction {
     });
   }
 
-  protected onExecute(): Promise<void> {
+  protected async onExecute(): Promise<void> {
     if (this._uri == null) {
       throw new Error('_uri not defined on action');
+    }
+
+    if (this._printerDataPath == null) {
+      throw new Error('_printerDataPath not defined on action');
     }
 
     if (this._uri.value == null) {
@@ -30,37 +31,9 @@ export default class RunAction extends CommandLineAction {
     }
 
     const uri = this._uri.value;
+    const printerDataPath = this._printerDataPath.value;
 
-    // TODO: connect this to websocketing
-    console.log('will eventually connect to', uri);
-
-    const printerDataPath = 'fixtures/2cadfa9fdad2c46a.printer';
-    const printerData = fs.readFileSync(printerDataPath).toString();
-
-    console.log('Contacting', this._uri.value);
-    console.log(printerData);
-    console.log('-----------------------------');
-
-    // Parse data from printer file
-    const deviceAddressMaybe = printerData.match(/address: ([a-f0-9]{16})/);
-
-    if (deviceAddressMaybe == null) {
-      throw new Error(`couldn't find device address in ${printerDataPath}`);
-    }
-    const deviceAddress = deviceAddressMaybe[1];
-
-    const bridgeAddress = Math.floor(
-      Math.random() * Math.floor(Math.pow(2, 64))
-    )
-      .toString(16)
-      .padStart(16, '0');
-
-    const device = new ConsolePrinter(deviceAddress);
-    const bridge = new Bridge(bridgeAddress, device);
-
-    wsclient(uri, bridge);
-
-    return Promise.resolve();
+    return await client(uri, printerDataPath);
   }
 
   protected onDefineParameters(): void {
@@ -71,6 +44,14 @@ export default class RunAction extends CommandLineAction {
       defaultValue: 'wss://littleprinter.nordprojects.co/api/v1/connection',
       parameterLongName: '--uri',
       parameterShortName: '-u',
+    });
+
+    this._printerDataPath = this.defineStringParameter({
+      argumentName: 'PATH',
+      environmentVariable: 'PRINTER_DATA_PATH',
+      description: 'Path to .printer data file (relative to project root)',
+      parameterLongName: '--printer-data-path',
+      parameterShortName: '-p',
     });
   }
 }
