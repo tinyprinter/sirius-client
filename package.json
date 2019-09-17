@@ -19,6 +19,7 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
+    "@microsoft/ts-command-line": "^4.2.8",
     "@types/node": "^12.7.2",
     "binary-parser": "^1.4.0",
     "escpos": "^2.5.2",
