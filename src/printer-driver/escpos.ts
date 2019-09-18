@@ -1,4 +1,4 @@
-import Printer from '.';
+import { IPrinterDriver, PrintingResult } from '.';
 import { CommandResponse } from '../../types';
 
 import termImg from 'escpos';
@@ -71,7 +71,7 @@ const printr = async (pixels: Pixels): Promise<void> => {
   });
 };
 
-const thermalise = async (buf: Buffer) => {
+const thermalise = async (buf: Buffer): Promise<void> => {
   // convert to PNG, because `get-pixels` doesn't support 1bit BMPs
   const png = await pnger(buf);
 
@@ -82,8 +82,8 @@ const thermalise = async (buf: Buffer) => {
   await printr(pixels);
 };
 
-export default class EscposPrinter extends Printer {
-  async print(buffer: Buffer): Promise<CommandResponse> {
+export default class EscposPrinter implements IPrinterDriver {
+  async print(buffer: Buffer): Promise<PrintingResult> {
     return await thermalise(buffer);
   }
 }

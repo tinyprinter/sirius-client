@@ -2,7 +2,8 @@ import fs from 'fs';
 import { promisify } from 'util';
 import wsclient from './wsclient';
 import Bridge from './bridge';
-import ConsolePrinter from './device/printer/console-printer';
+import Printer from './device/printer';
+import ConsolePrinterDriver from './printer-driver/console';
 
 const readFile = promisify(fs.readFile);
 
@@ -81,7 +82,8 @@ export default async (uri: string, printerDataPath?: string) => {
   console.log(config);
   console.log('-----------------------------');
 
-  const device = new ConsolePrinter(config.deviceAddress);
+  const printerDriver = new ConsolePrinterDriver();
+  const device = new Printer(config.deviceAddress, printerDriver);
   const bridge = new Bridge(config.bridgeAddress, device);
 
   wsclient(uri, bridge);
