@@ -1,4 +1,4 @@
-import ClientCommandLine from '../src/cli/client-command-line';
+import CommandLine from '../src/cli/client-command-line';
 
-const cli: ClientCommandLine = new ClientCommandLine();
+const cli = new CommandLine();
 cli.execute();

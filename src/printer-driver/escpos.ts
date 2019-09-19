@@ -1,7 +1,4 @@
 import { IPrinterDriver, PrintingResult } from '.';
-import { CommandResponse } from '../../types';
-
-import termImg from 'escpos';
 
 import escpos from 'escpos';
 import getPixels from 'get-pixels';
