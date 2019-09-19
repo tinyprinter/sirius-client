@@ -7,15 +7,8 @@ import {
 } from '@microsoft/ts-command-line';
 import ConsolePrinterDriver from '../../printer-driver/console';
 import decoder from '../../decoder';
-import { BinaryPayload } from '../../decoder/types';
 
 const readFile = promisify(fs.readFile);
-
-const decodeFile = async (path: string): Promise<BinaryPayload> => {
-  const payload = await readFile(path);
-  const json = JSON.parse(payload.toString('utf-8'));
-  return await decoder(json.binary_payload);
-};
 
 export default class PayloadAction extends CommandLineAction {
   private _payloadPath?: CommandLineStringParameter;
@@ -40,10 +33,17 @@ export default class PayloadAction extends CommandLineAction {
 
     const payloadPath = this._payloadPath.value;
 
-    const decoded = await decodeFile(payloadPath);
-    const driver = new ConsolePrinterDriver();
+    try {
+      const payload = await readFile(payloadPath);
+      const json = JSON.parse(payload.toString('utf-8'));
+      const decoded = await decoder(json.binary_payload);
 
-    return await driver.print(decoded.payload.bitmap);
+      const driver = new ConsolePrinterDriver();
+
+      return await driver.print(decoded.payload.bitmap);
+    } catch (error) {
+      console.log({ error });
+    }
   }
 
   protected onDefineParameters(): void {

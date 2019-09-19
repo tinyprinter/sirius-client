@@ -8,12 +8,12 @@ const header = (buf: Buffer, offset: number = 0): CommandHeader => {
     .skip(offset)
     .uint8('deviceId')
     .uint8('unused', {
-      assert: x => x === 0,
+      assert: 0x0,
     })
     .uint16('commandId')
     .uint32('printId')
     .uint32('crc', {
-      assert: x => x === 0,
+      assert: 0x0,
     })
     .uint32('length');
 
