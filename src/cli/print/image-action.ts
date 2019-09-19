@@ -33,6 +33,8 @@ export default class ImageAction extends CommandLineAction {
     const imagePath = this._imagePath.value;
     const buffer = await readFile(imagePath);
 
+    // xtreme TODO: resize to 384px, black/white
+
     const driver = new ConsolePrinterDriver();
 
     return await driver.print(buffer);
