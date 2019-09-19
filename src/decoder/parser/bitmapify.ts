@@ -1,6 +1,4 @@
-// import { padImageData, createBitmapFile } from '@ericandrewlewis/bitmap';
 import bmp from 'fast-bmp';
-import fs from 'fs';
 
 // prettier-ignore
 const colorTable = Buffer.from([
