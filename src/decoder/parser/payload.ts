@@ -9,7 +9,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxPrinterSpeedParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 4,
-    assert: arg => {
+    assert: function(arg) {
       const x: any[] = arg as any;
       return x[0] === 0x1d && x[1] === 0x73 && x[2] === 0x03 && x[3] === 0xe8;
     },
@@ -20,7 +20,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
     .array('data', {
       type: 'uint8',
       length: 3,
-      assert: arg => {
+      assert: function(arg) {
         const x: any[] = arg as any;
         return x[0] === 0x1d && x[1] === 0x61 && x[2] === 0xd0;
       },
@@ -29,7 +29,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const peakCurrentParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 3,
-    assert: arg => {
+    assert: function(arg) {
       const x: any[] = arg as any;
       return x[0] === 0x1d && x[1] === 0x2f && x[2] === 0x0f;
     },
@@ -38,7 +38,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxIntensityParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 3,
-    assert: arg => {
+    assert: function(arg) {
       const x: any[] = arg as any;
       return x[0] === 0x1d && x[1] === 0x44 && x[2] === 0x80;
     },
@@ -61,18 +61,30 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
 
   const printerDataParser = new Parser()
     .endianess('little')
-    .uint8('static1', { assert: x => x === 0x1b })
-    .uint8('static2', { assert: x => x === 0x2a })
+    .uint8('static1', {
+      assert: 0x1b,
+    })
+    .uint8('static2', {
+      assert: 0x2a,
+    })
     .uint8('n1')
     .uint8('n2')
     .uint8('n3')
-    .uint8('static3', { assert: x => x === 0x0 })
-    .uint8('static4', { assert: x => x === 0x0 })
-    .uint8('static5', { assert: x => x === 0x30 });
+    .uint8('static3', {
+      assert: 0x0,
+    })
+    .uint8('static4', {
+      assert: 0x0,
+    })
+    .uint8('static5', {
+      assert: 0x30,
+    });
 
   const rleParser = new Parser()
     .endianess('little')
-    .uint8('type', { assert: x => x === 0x1 }) // assume compressed
+    .uint8('type', {
+      assert: 0x1,
+    }) // assume compressed
     .uint32('compressed_length')
     .array('compressed_data', {
       type: 'uint8',

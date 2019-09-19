@@ -1,18 +1,21 @@
-import { IDevice } from '../';
-import { CommandResponse } from '../../types';
-import { BinaryPayload } from '../../decoder/types';
+import { IDevice } from './';
+import { IPrinterDriver } from '../printer-driver';
+import { CommandResponse } from '../types';
+import { BinaryPayload } from '../decoder/types';
 import assert from 'assert';
 
 interface IPrinter extends IDevice {
   print(buffer: Buffer): Promise<CommandResponse>;
 }
 
-export default abstract class Printer implements IPrinter {
+export default class Printer implements IPrinter {
   encryptionKey?: string;
   address: string;
+  printerDriver: IPrinterDriver;
 
-  constructor(address: string) {
+  constructor(address: string, printerDriver: IPrinterDriver) {
     this.address = address;
+    this.printerDriver = printerDriver;
   }
 
   async handlePayload(payload: BinaryPayload): Promise<CommandResponse> {
@@ -25,6 +28,8 @@ export default abstract class Printer implements IPrinter {
   }
 
   async print(buffer: Buffer): Promise<CommandResponse> {
-    throw new Error('Method not implemented.');
+    const result = await this.printerDriver.print(buffer);
+
+    return Promise.resolve(result);
   }
 }
