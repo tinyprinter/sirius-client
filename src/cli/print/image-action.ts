@@ -5,7 +5,7 @@ import {
   CommandLineAction,
   CommandLineStringParameter,
 } from '@microsoft/ts-command-line';
-import ConsolePrinterDriver from '../../printer-driver/console';
+import EscposPrinterDriver from '../../printer-driver/escpos';
 
 import process from '../../image-processor';
 
@@ -36,7 +36,7 @@ export default class ImageAction extends CommandLineAction {
     const source = await readFile(imagePath);
     const processed = await process(source);
 
-    const driver = new ConsolePrinterDriver();
+    const driver = new EscposPrinterDriver();
 
     return await driver.print(processed);
   }
