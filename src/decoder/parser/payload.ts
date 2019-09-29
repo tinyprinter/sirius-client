@@ -3,6 +3,7 @@ import { Parser } from 'binary-parser';
 import { CommandPayload } from '../types';
 
 import unrle from './unrle';
+import bitmapify from './bitmapify';
 
 // There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now. What do we have, if we don't trust blindly?
 export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
@@ -110,10 +111,12 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
 
   const result = parser.parse(buf);
 
-  const bitmap = await unrle(result.rle.compressed_data as number[]);
+  const bytes = await unrle(result.rle.compressed_data as number[]);
+  const bitmap = bitmapify(bytes);
 
   return {
     length: result.payload_length_with_header_plus_one,
     bitmap,
+    bytes,
   };
 };

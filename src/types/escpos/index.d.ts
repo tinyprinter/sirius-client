@@ -1,4 +1,6 @@
 declare module 'escpos' {
+  import { OutEndpoint } from 'usb';
+
   type Density = 'd8' | 's8' | 'd24' | 's24';
 
   class MutableBuffer {
@@ -8,7 +10,11 @@ declare module 'escpos' {
   }
 
   abstract class Device {
-    open(callback: () => void): void;
+    endpoint: OutEndpoint;
+
+    open(callback: (err: Error) => void): void;
+    close(callback: (err: Error) => void): void;
+    write(data: Buffer, callback: (err: Error) => void): void;
   }
 
   class USB extends Device {}
