@@ -2,6 +2,11 @@ import { USB } from 'escpos';
 import { promisify } from 'util';
 import fs from 'fs';
 import decoder from '../src/decoder';
+import getPixels from 'get-pixels';
+import gm from 'gm';
+import ndarray from 'ndarray';
+
+const im = gm.subClass({ imageMagick: true });
 
 const readFile = promisify(fs.readFile);
 
@@ -90,28 +95,81 @@ const footer =
 
 const payloadPath = './fixtures/events/DeviceCommand.json';
 
+const pnger = async (buf: Buffer): Promise<Buffer> => {
+  return new Promise((resolve, reject) => {
+    im(buf)
+      .colors(2)
+      .define('png:bit-depth=1')
+      .toBuffer('PNG', (err, out) => {
+        if (err) {
+          return reject(err);
+        }
+
+        return resolve(out);
+      });
+  });
+};
+
+const pixeler = async (buf: Buffer): Promise<ndarray> => {
+  return new Promise((resolve, reject) => {
+    getPixels(buf, 'image/png', (err, pixels) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(pixels);
+    });
+  });
+};
+
 (async () => {
   try {
     const payload = await readFile(payloadPath);
     const json = JSON.parse(payload.toString('utf-8'));
     const decoded = await decoder(json.binary_payload);
 
-    const bytes = decoded.payload.bytes;
+    const bitmap = decoded.payload.bitmap;
+
+    const pixels = await pixeler(await pnger(bitmap));
+
+    let data = [];
+    function rgb(pixel: number[]) {
+      return {
+        r: pixel[0],
+        g: pixel[1],
+        b: pixel[2],
+        a: pixel[3],
+      };
+    }
+
+    for (let i = 0; i < pixels.data.length; i += pixels.shape[2]) {
+      data.push(
+        rgb(
+          new Array(pixels.shape[2]).fill(0).map(function(_, b) {
+            return pixels.data[i + b];
+          })
+        )
+      );
+    }
+
+    data = data.map(pixel => {
+      if (pixel.a == 0) {
+        return 0;
+      }
+      var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+      return shouldBeWhite ? 0 : 1;
+    });
 
     const buffers: Buffer[] = [];
 
-    const width = 384;
-    const rowCount = bytes.length / width;
+    const width = pixels.shape[0];
+    const rowCount = pixels.shape[1];
 
     for (let row = 0; row < rowCount; row++) {
       const begin = row * width;
-      const rowBits = bytes.slice(begin, begin + width);
-
+      const rowBits = data.slice(begin, begin + width);
       const rowBytes = new Uint8Array(width / 8);
-
       for (let b = 0; b < rowBytes.length; b++) {
-        // 1 = white, 0 = black in source, so flip 'emz
-        rowBytes[b] = ~(
+        rowBytes[b] =
           (rowBits[b * 8 + 0] << 7) |
           (rowBits[b * 8 + 1] << 6) |
           (rowBits[b * 8 + 2] << 5) |
@@ -119,21 +177,17 @@ const payloadPath = './fixtures/events/DeviceCommand.json';
           (rowBits[b * 8 + 4] << 3) |
           (rowBits[b * 8 + 5] << 2) |
           (rowBits[b * 8 + 6] << 1) |
-          (rowBits[b * 8 + 7] << 0)
-        );
+          (rowBits[b * 8 + 7] << 0);
       }
-
       const preamble = Buffer.from(
         '\x62' + String.fromCharCode(rowBytes.length) + '\x00'
       );
-
-      console.log(rowBytes.length, rowBits.length);
-
+      // console.log(rowBytes.length, rowBits.length);
       buffers.push(Buffer.concat([preamble, rowBytes]));
     }
 
     // console.log(
-    //   bytes.toString('hex'),
+    //   // bytes.toString('hex'),
     //   buffers.length,
     //   JSON.stringify(buffers.map(buf => buf.toString('hex')), null, 2)
     // );
