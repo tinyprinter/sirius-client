@@ -1,13 +1,8 @@
 declare module 'escpos' {
+  import { MutableBuffer } from 'mutable-buffer';
   import { OutEndpoint } from 'usb';
 
   type Density = 'd8' | 's8' | 'd24' | 's24';
-
-  class MutableBuffer {
-    write(string: string): void;
-    write(buffer: Buffer): void;
-    writeUInt8(number: number): void;
-  }
 
   abstract class Device {
     endpoint: OutEndpoint;

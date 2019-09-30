@@ -2,7 +2,7 @@ import gm, { State } from 'gm';
 
 const im = gm.subClass({ imageMagick: true });
 
-const WIDTH = 384;
+const WIDTH = 384; // 576 for 80mm paper
 
 const gmify = (buf: Buffer): Promise<State> => {
   return Promise.resolve(im(buf));

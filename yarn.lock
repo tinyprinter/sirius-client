@@ -1056,11 +1056,6 @@ cwise-compiler@^1.1.2:
   dependencies:
     uniq "^1.0.0"
 
-dank-do-while@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/dank-do-while/-/dank-do-while-0.1.2.tgz#819b25937b9777657b56f5172ad856596fcd0c84"
-  integrity sha1-gZslk3uXd2V7VvUXKthWWW/NDIQ=
-
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -2658,7 +2653,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mutable-buffer@^2.0.3:
+mutable-buffer@^2.0.3, mutable-buffer@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/mutable-buffer/-/mutable-buffer-2.1.1.tgz#fcd0567d326a4a8e7d7e0dd8fe0b71c7364ab04c"
   integrity sha512-fKlBJ3DJh3lVwdkR96FyvqxW8vswhk2KthgK55ZQv3DrGzllvmTWjKRSgS9sJMr+b7zjWFV8q/pHLR42ADCxtg==
@@ -2791,15 +2786,6 @@ node-pre-gyp@^0.12.0:
     rimraf "^2.6.1"
     semver "^5.3.0"
     tar "^4"
-
-"node-thermal-printer@https://github.com/Klemen1337/node-thermal-printer#21304e24c0cd97123b5a6c5aa82bc2426c3d8e37":
-  version "4.1.0"
-  resolved "https://github.com/Klemen1337/node-thermal-printer#21304e24c0cd97123b5a6c5aa82bc2426c3d8e37"
-  dependencies:
-    iconv-lite "0.4.24"
-    pngjs "3.3.3"
-    unorm "1.4.1"
-    write-file-queue "0.0.1"
 
 noop-logger@^0.1.1:
   version "0.1.1"
@@ -3098,11 +3084,6 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-pngjs@3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
-  integrity sha512-1n3Z4p3IOxArEs1VRXnZ/RXdfEniAUS9jb68g58FIXMNkPJeZd+Qh4Uq7/e0LVxAQGos1eIUrqrt4FpjdnEd+Q==
-
 pngjs@^3.3.3:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.4.0.tgz#99ca7d725965fb655814eaf65f38f12bbdbf555f"
@@ -3154,11 +3135,6 @@ pretty-format@^24.9.0:
     ansi-regex "^4.0.0"
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
-
-printer@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/printer/-/printer-0.2.2.tgz#830b8f5c97b97fd9b464d4f4e105d43337792296"
-  integrity sha1-gwuPXJe5f9m0ZNT04QXUMzd5IpY=
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -3970,11 +3946,6 @@ uniq@^1.0.0:
   resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
   integrity sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8=
 
-unorm@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.4.1.tgz#364200d5f13646ca8bcd44490271335614792300"
-  integrity sha1-NkIA1fE2RsqLzURJAnEzVhR5IwA=
-
 unset-value@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unset-value/-/unset-value-1.0.0.tgz#8376873f7d2335179ffb1e6fc3a8ed0dfc8ab559"
@@ -4154,13 +4125,6 @@ write-file-atomic@2.4.1:
     graceful-fs "^4.1.11"
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
-
-write-file-queue@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/write-file-queue/-/write-file-queue-0.0.1.tgz#3764f614451806e9612c969b770d830a6a8115e9"
-  integrity sha1-N2T2FEUYBulhLJabdw2DCmqBFek=
-  dependencies:
-    dank-do-while "^0.1.2"
 
 ws@^5.2.0:
   version "5.2.2"

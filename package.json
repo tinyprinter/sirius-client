@@ -28,8 +28,7 @@
     "fast-bmp": "^1.0.0",
     "get-pixels": "^3.3.2",
     "gm": "^1.23.1",
-    "node-thermal-printer": "https://github.com/Klemen1337/node-thermal-printer#21304e24c0cd97123b5a6c5aa82bc2426c3d8e37",
-    "printer": "^0.2.2",
+    "mutable-buffer": "^2.1.1",
     "term-img": "^4.1.0",
     "ws": "^7.1.2"
   }

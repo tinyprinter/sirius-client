@@ -6,6 +6,12 @@ import getPixels from 'get-pixels';
 import gm from 'gm';
 import ndarray from 'ndarray';
 
+import StarCommander, {
+  PrinterSpeed,
+  PageCut,
+  DocumentCut,
+} from './commander/star-commander';
+
 const im = gm.subClass({ imageMagick: true });
 
 const usb = new USB();
@@ -14,15 +20,37 @@ const close = promisify(usb.close).bind(usb);
 const write = promisify(usb.write).bind(usb);
 
 const header =
-  '\x1b\x40\x1b\x1e\x41\x00\x1b\x07\x14\x14\x1b\x2a\x72\x52\x1b\x2a' +
-  '\x72\x41\x1b\x2a\x72\x51\x32\x00\x1b\x2a\x72\x44\x30\x00\x1b\x2a' +
-  '\x72\x50\x30\x00\x1b\x2a\x72\x46\x31\x00\x1b\x2a\x72\x45\x31\x33' +
+  '\x1b\x40 \x1b\x1e\x41\x01 \x1b\x07\x14\x14 \x1b\x2a\x72\x52 \x1b\x2a' +
+  '\x72\x41 \x1b\x2a\x72\x51\x32\x00 \x1b\x2a\x72\x44\x30\x00 \x1b\x2a' +
+  '\x72\x50\x30\x00 \x1b\x2a\x72\x46\x31\x00 \x1b\x2a\x72\x45\x31\x33' +
   '\x00\x00';
 
 const footer =
-  '\x1b\x2a\x72\x59' +
-  '\x31\x00\x1b\x0c\x00\x1b\x2a\x72\x59\x31\x00\x1b\x0c\x04\x1b\x2a' +
-  '\x72\x42';
+  '\x1b\x2a\x72\x59\x31\x00' +
+  '\x1b\x0c\x00' +
+  '\x1b\x2a\x72\x59\x31\x00' +
+  '\x1b\x0c\x04' +
+  '\x1b\x2a\x72\x42';
+
+const commander = new StarCommander();
+commander.initialise();
+commander.setPrintableWidth(1);
+commander.initialiseRasterMode();
+commander.setPrintSpeed(PrinterSpeed.High);
+commander.setPageLength();
+commander.setPageCut(PageCut.None);
+commander.setDocumentCut(DocumentCut.Partial);
+commander.startPage();
+
+const headerBuffer = commander.fetchBuffer();
+
+commander.lineFeed(1);
+commander.executeFormFeed();
+commander.lineFeed(1);
+commander.executeEOT();
+commander.endRasterMode();
+
+const footerBuffer = commander.fetchBuffer();
 
 const pnger = async (buf: Buffer): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
@@ -123,9 +151,9 @@ export default class StarPrinterDriver implements IPrinterDriver {
 
     console.log('writing commands');
 
-    await write(Buffer.from(header, 'ascii'));
+    await write(headerBuffer);
     buffers.forEach(async buffer => await write(buffer));
-    await write(Buffer.from(footer, 'ascii'));
+    await write(footerBuffer);
 
     console.log('...commands written');
 
