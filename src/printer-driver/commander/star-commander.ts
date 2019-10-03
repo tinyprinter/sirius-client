@@ -1,3 +1,7 @@
+/**
+ * This only supports TSP100 ("TSP143"?!) because that's the only printer I have access to. _Most_ of the commands are the same across models, but things like cut options/paper size might not work as expected on other models!
+ */
+
 import { MutableBuffer } from 'mutable-buffer';
 
 export enum PrinterSpeed {
@@ -16,6 +20,11 @@ export enum DocumentCut {
   Partial = '13',
 }
 
+export enum PrintableWidth {
+  WIDTH_72MM = 0,
+  WIDTH_51MM = 1,
+}
+
 export default class StarCommander {
   private buffer: MutableBuffer;
 
@@ -31,7 +40,7 @@ export default class StarCommander {
   /**
    * @param width TSP100: 0 = 80mm paper (72mm print), 1 = 58mm paper (51mm print)
    */
-  setPrintableWidth(width: number): this {
+  setPrintableWidth(width: PrintableWidth): this {
     this.buffer.write('\x1b\x1e\x41', 'ascii');
     this.buffer.writeUInt8(width);
     return this;
@@ -61,6 +70,7 @@ export default class StarCommander {
     return this;
   }
 
+  // note: hard-coded to content length
   setPageLength(): this {
     // set raster page length: ESC * r P n NUL
     this.buffer.write('\x1b\x2a\x72\x50' + '\x30' + '\x00', 'ascii');
