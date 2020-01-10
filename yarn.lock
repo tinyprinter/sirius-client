@@ -448,6 +448,11 @@
   dependencies:
     "@types/jest-diff" "*"
 
+"@types/ndarray@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/ndarray/-/ndarray-1.0.7.tgz#046c4391220b61557b0779790c556018608d890d"
+  integrity sha512-PdCzZlZPWB4D467RrDIz79WbthmH8miN/rY8zrlKyX0IejKtGcMUpfQTrJI8jvrazGPNmRuo+qbim1HUHSUhEQ==
+
 "@types/node@*", "@types/node@^12.7.2":
   version "12.7.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
@@ -462,6 +467,13 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
+
+"@types/usb@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@types/usb/-/usb-1.5.1.tgz#7ade8ea0135089c9fbc1d2148084a3013fc4128f"
+  integrity sha512-1qhcYMLJ0I2HcRG3G/nBcRZ0KrrTdGdUNcCkEVgcga4KMlDXWh6LZJjVA6MiWEDa+BOaQTEfGJfuNaQ71IQOpg==
+  dependencies:
+    "@types/node" "*"
 
 "@types/ws@^6.0.3":
   version "6.0.3"
@@ -2641,7 +2653,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mutable-buffer@^2.0.3:
+mutable-buffer@^2.0.3, mutable-buffer@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/mutable-buffer/-/mutable-buffer-2.1.1.tgz#fcd0567d326a4a8e7d7e0dd8fe0b71c7364ab04c"
   integrity sha512-fKlBJ3DJh3lVwdkR96FyvqxW8vswhk2KthgK55ZQv3DrGzllvmTWjKRSgS9sJMr+b7zjWFV8q/pHLR42ADCxtg==

@@ -1,6 +1,4 @@
-// import { padImageData, createBitmapFile } from '@ericandrewlewis/bitmap';
 import bmp from 'fast-bmp';
-import fs from 'fs';
 
 // prettier-ignore
 const colorTable = Buffer.from([
@@ -52,14 +50,15 @@ const packem = (input: number[], width: number, height: number): Uint8Array => {
   return buf;
 };
 
-export default (input: number[]): Buffer => {
+export default (input: Buffer): Buffer => {
+  const bytes = Array.prototype.slice.call(input);
   const width = 384;
   const height = input.length / 384;
 
   return bmp.encode({
     width,
     height,
-    data: Buffer.from(packem(input, width, height)),
+    data: Buffer.from(packem(bytes, width, height)),
     bitDepth: 1,
     components: 1,
     channels: 1,

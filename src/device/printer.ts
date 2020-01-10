@@ -24,7 +24,7 @@ export default class Printer implements IPrinter {
       "Payload isn't for a printer, so we can't really handle it here :<"
     );
 
-    return await this.print(payload.payload.bitmap);
+    return await this.print(payload.payload.bytes);
   }
 
   async print(buffer: Buffer): Promise<CommandResponse> {

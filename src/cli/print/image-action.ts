@@ -5,7 +5,9 @@ import {
   CommandLineAction,
   CommandLineStringParameter,
 } from '@microsoft/ts-command-line';
-import ConsolePrinterDriver from '../../printer-driver/console';
+import ConsoleDriver from '../../printer-driver/console';
+
+import process from '../../image-processor';
 
 const readFile = promisify(fs.readFile);
 
@@ -31,13 +33,12 @@ export default class ImageAction extends CommandLineAction {
     }
 
     const imagePath = this._imagePath.value;
-    const buffer = await readFile(imagePath);
+    const source = await readFile(imagePath);
+    const processed = await process(source);
 
-    // xtreme TODO: resize to 384px, black/white
+    const driver = new ConsoleDriver();
 
-    const driver = new ConsolePrinterDriver();
-
-    return await driver.print(buffer);
+    return await driver.print(processed);
   }
 
   protected onDefineParameters(): void {

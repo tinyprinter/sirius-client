@@ -40,7 +40,7 @@ export default class PayloadAction extends CommandLineAction {
 
       const driver = new ConsolePrinterDriver();
 
-      return await driver.print(decoded.payload.bitmap);
+      return await driver.print(decoded.payload.bytes);
     } catch (error) {
       console.log({ error });
     }

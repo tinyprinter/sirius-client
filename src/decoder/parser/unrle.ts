@@ -70,6 +70,5 @@ export { bloop, decompress };
 export default async (input: number[]): Promise<Buffer> => {
   const decompressed = decompress(input);
   const output = bloop(decompressed);
-  const bitmap = bitmapify(output);
-  return bitmap;
+  return Buffer.from(output);
 };
