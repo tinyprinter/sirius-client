@@ -12,17 +12,17 @@
     "@types/gm": "^1.18.4",
     "@types/jest": "^24.0.18",
     "@types/ndarray": "^1.0.7",
+    "@types/node": "^13.0.0",
     "@types/usb": "^1.5.1",
     "@types/ws": "^6.0.3",
     "jest": "^24.9.0",
-    "prettier": "1.18.2",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "typescript": "3.5.3"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "@microsoft/ts-command-line": "^4.2.8",
-    "@types/node": "^12.7.2",
     "binary-parser": "^1.4.0",
     "escpos": "^2.5.2",
     "fast-bmp": "^1.0.0",
