@@ -61,8 +61,6 @@ describe('StarCommander', () => {
       expect(sc.fetchBuffer().toString('ascii')).toBe(`${ESC}*rE13${NUL}`);
     });
 
-    it('can process image', () => {});
-
     it('can initialise', () => {
       sc.initialise();
       expect(sc.fetchBuffer().toString('ascii')).toBe(`${ESC}@`);
@@ -106,5 +104,7 @@ describe('StarCommander', () => {
       sc.executeEOT();
       expect(sc.fetchBuffer().toString('ascii')).toBe(`${ESC}\x0c\x04`);
     });
+
+    it('can process image', () => {});
   });
 });

@@ -112,11 +112,11 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const result = parser.parse(buf);
 
   const bytes = await unrle(result.rle.compressed_data as number[]);
-  const bitmap = bitmapify(bytes);
+  // const bitmap = bitmapify(bytes);
 
   return {
     length: result.payload_length_with_header_plus_one,
-    bitmap,
+    // bitmap,
     bytes,
   };
 };

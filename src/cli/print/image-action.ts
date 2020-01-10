@@ -5,7 +5,7 @@ import {
   CommandLineAction,
   CommandLineStringParameter,
 } from '@microsoft/ts-command-line';
-import StarPrinterDriver from '../../printer-driver/star';
+import ConsoleDriver from '../../printer-driver/console';
 
 import process from '../../image-processor';
 
@@ -36,7 +36,7 @@ export default class ImageAction extends CommandLineAction {
     const source = await readFile(imagePath);
     const processed = await process(source);
 
-    const driver = new StarPrinterDriver();
+    const driver = new ConsoleDriver();
 
     return await driver.print(processed);
   }
