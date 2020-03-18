@@ -57,6 +57,7 @@ Future ideas include:
 
 - multiplex printing (print to multiple printers in parallel)
 - Bluetooth printer support
+- web-based printer configuration via admin control panel
 
 ## How can I help?
 
