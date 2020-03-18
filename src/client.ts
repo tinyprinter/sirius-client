@@ -51,14 +51,14 @@ const parsePrinterDataFile = async (
   };
 };
 
-export default async (uri: string, printerDataPath?: string) => {
+export default async (uri: string, printerDataPath?: string): Promise<void> => {
   let config: Config | null = null;
 
   if (printerDataPath == null) {
     // check default location
     // if no data, generate new printer
     // print out claim code
-
+    /*
     const deviceAddress = 'x';
     const bridgeAddress = 'y';
     const claimCode = 'z';
@@ -68,6 +68,7 @@ export default async (uri: string, printerDataPath?: string) => {
     //   bridgeAddress,
     //   claimCode,
     // };
+    */
   } else {
     config = await parsePrinterDataFile(printerDataPath);
   }
