@@ -1,4 +1,4 @@
-export interface IPrinterDriver {
+export interface PrinterDriverInterface {
   print(buffer: Buffer): Promise<PrintingResult>;
 }
 

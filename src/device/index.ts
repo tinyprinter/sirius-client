@@ -1,7 +1,7 @@
 import { CommandResponse } from '../types';
 import { BinaryPayload } from '../decoder/types';
 
-export interface IDevice {
+export interface DeviceInterface {
   address: string;
   encryptionKey?: string;
 

@@ -1,19 +1,19 @@
 import WebSocket from 'ws';
 
-import { IBridge, Command } from './bridge';
+import { BridgeInterface, Command } from './bridge';
 import assert from 'assert';
 
 class BridgeState {
-  isOnline: boolean = true;
-  needsKey: boolean = true;
-  bridge: IBridge;
+  isOnline = true;
+  needsKey = true;
+  bridge: BridgeInterface;
 
-  constructor(bridge: IBridge) {
+  constructor(bridge: BridgeInterface) {
     this.bridge = bridge;
   }
 }
 
-export default (uri: string, bridge: IBridge) => {
+export default (uri: string, bridge: BridgeInterface): void | number => {
   // Sanity check websocket connection URL:
   if (!uri.endsWith('/api/v1/connection')) {
     console.log("Websocket URL must end with '/api/v1/connection'");
@@ -31,7 +31,7 @@ export default (uri: string, bridge: IBridge) => {
     `connecting to ${uri} as: bridge: ${bridge.address}, device: ${bridge.device.address}`
   );
 
-  const heartbeat = async () => {
+  const heartbeat = async (): Promise<void> => {
     if (state.isOnline) {
       ws.send(await state.bridge.heartbeat());
     } else {

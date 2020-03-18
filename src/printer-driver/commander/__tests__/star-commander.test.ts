@@ -105,6 +105,6 @@ describe('StarCommander', () => {
       expect(sc.fetchBuffer().toString('ascii')).toBe(`${ESC}\x0c\x04`);
     });
 
-    it('can process image', () => {});
+    // it('can process image', () => {});
   });
 });

@@ -105,7 +105,7 @@ export default class StarCommander {
     return this;
   }
 
-  lineFeed(lines: number = 1): this {
+  lineFeed(lines = 1): this {
     this.buffer.write(
       '\x1b\x2a\x72\x59' + lines.toString(10) + '\x00',
       'ascii'

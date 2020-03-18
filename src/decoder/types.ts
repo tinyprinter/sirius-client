@@ -23,7 +23,7 @@ export interface CommandHeader {
   length: number;
 }
 
-export interface CommandPayloadHeader {}
+// export interface CommandPayloadHeader {}
 
 export interface CommandPayload {
   length: number;

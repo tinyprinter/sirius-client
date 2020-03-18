@@ -1,12 +1,17 @@
 import bmp from 'fast-bmp';
 
 // prettier-ignore
-const colorTable = Buffer.from([
-  0x00, 0x00, 0x00, 0x00,
-  0xff, 0xff, 0xff, 0x00,
-]);
+// const colorTable = Buffer.from([
+//   0x00, 0x00, 0x00, 0x00,
+//   0xff, 0xff, 0xff, 0x00,
+// ]);
 
-const setBit = (buffer: Uint8Array, i: number, bit: number, value: number) => {
+const setBit = (
+  buffer: Uint8Array,
+  i: number,
+  bit: number,
+  value: number
+): void => {
   if (value == 0) {
     buffer[i] &= ~(1 << bit);
   } else {
