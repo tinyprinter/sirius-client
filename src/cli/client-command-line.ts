@@ -1,7 +1,7 @@
 import {
   CommandLineParser,
   CommandLineFlagParameter,
-} from '@microsoft/ts-command-line';
+} from '@rushstack/ts-command-line';
 
 import RunAction from './client/run-action';
 

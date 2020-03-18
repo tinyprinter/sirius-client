@@ -1,7 +1,7 @@
 import {
   CommandLineAction,
   CommandLineStringParameter,
-} from '@microsoft/ts-command-line';
+} from '@rushstack/ts-command-line';
 
 import client from '../../client';
 
