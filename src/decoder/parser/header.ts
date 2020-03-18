@@ -2,7 +2,7 @@ import { Parser } from 'binary-parser';
 
 import { CommandHeader } from '../types';
 
-const header = (buf: Buffer, offset: number = 0): CommandHeader => {
+const header = (buf: Buffer, offset = 0): CommandHeader => {
   const parser = new Parser()
     .endianess('little')
     .skip(offset)

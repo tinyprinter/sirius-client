@@ -1,4 +1,4 @@
-import { IDevice } from '../device';
+import { DeviceInterface } from '../device';
 import * as pf from '../protocol-fragments';
 import assert from 'assert';
 import decoder from '../decoder';
@@ -21,10 +21,10 @@ export type Command = {
  *
  * For simplicity right now, it only handles one device, but (TODO:!) we should support multiple devices on a single bridge.
  */
-export interface IBridge {
+export interface BridgeInterface {
   address: string;
 
-  device: IDevice;
+  device: DeviceInterface;
 
   connect(): Promise<CommandResponse>;
   heartbeat(): Promise<CommandResponse>;
@@ -58,11 +58,11 @@ type DeviceCommand = Command & {
   device_address: string;
 };
 
-export default class Bridge implements IBridge {
+export default class Bridge implements BridgeInterface {
   address: string;
-  device: IDevice;
+  device: DeviceInterface;
 
-  constructor(address: string, device: IDevice) {
+  constructor(address: string, device: DeviceInterface) {
     this.address = address;
     this.device = device;
   }

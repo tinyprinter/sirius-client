@@ -1,5 +1,3 @@
-import bitmapify from './bitmapify';
-
 const TRANSLATE = [
   [1536, 255],
   [1152, 254],

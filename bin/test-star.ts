@@ -121,7 +121,7 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
   });
 };
 
-(async () => {
+(async (): Promise<void> => {
   try {
     const payload = await readFile(payloadPath);
     const json = JSON.parse(payload.toString('utf-8'));
@@ -132,7 +132,9 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
     const pixels = await pixeler(await pnger(bitmap));
 
     let data = [];
-    function rgb(pixel: number[]) {
+    function rgb(
+      pixel: number[]
+    ): { r: number; g: number; b: number; a: number } {
       return {
         r: pixel[0],
         g: pixel[1],
@@ -155,7 +157,7 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
       if (pixel.a == 0) {
         return 0;
       }
-      var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+      const shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
       return shouldBeWhite ? 0 : 1;
     });
 

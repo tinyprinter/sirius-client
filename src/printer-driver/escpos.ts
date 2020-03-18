@@ -1,10 +1,10 @@
-import { IPrinterDriver, PrintingResult } from '.';
+import { PrinterDriverInterface, PrintingResult } from '.';
 
 import escpos from 'escpos';
 import getPixels from 'get-pixels';
 import gm from 'gm';
 
-interface Pixels {}
+type Pixels = {};
 
 const im = gm.subClass({ imageMagick: true });
 
@@ -38,7 +38,7 @@ const pixeler = async (buf: Buffer): Promise<Pixels> => {
 };
 
 const printr = async (pixels: Pixels): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const image = new escpos.Image(pixels);
 
     device.open(() => {
@@ -79,7 +79,7 @@ const thermalise = async (buf: Buffer): Promise<void> => {
   await printr(pixels);
 };
 
-export default class EscposPrinter implements IPrinterDriver {
+export default class EscposPrinter implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
     return await thermalise(buffer);
   }

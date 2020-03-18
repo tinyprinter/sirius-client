@@ -1,4 +1,4 @@
-import { IPrinterDriver, PrintingResult } from '.';
+import { PrinterDriverInterface, PrintingResult } from '.';
 
 import { USB } from 'escpos';
 import { promisify } from 'util';
@@ -65,12 +65,14 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
   });
 };
 
-export default class StarPrinterDriver implements IPrinterDriver {
+export default class StarPrinterDriver implements PrinterDriverInterface {
   async print(image: Buffer): Promise<PrintingResult> {
     const pixels = await pixeler(await pnger(image));
 
     let data = [];
-    function rgb(pixel: number[]) {
+    function rgb(
+      pixel: number[]
+    ): { r: number; g: number; b: number; a: number } {
       return {
         r: pixel[0],
         g: pixel[1],
@@ -93,7 +95,7 @@ export default class StarPrinterDriver implements IPrinterDriver {
       if (pixel.a == 0) {
         return 0;
       }
-      var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+      const shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
       return shouldBeWhite ? 0 : 1;
     });
 

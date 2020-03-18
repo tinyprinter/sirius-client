@@ -15,7 +15,9 @@ export default class PrintCommandLine extends CommandLineParser {
     this.addAction(new PayloadAction());
   }
 
-  onDefineParameters() {}
+  onDefineParameters(): void {
+    // TODO: implement me?
+  }
 
   protected onExecute(): Promise<void> {
     return super.onExecute();

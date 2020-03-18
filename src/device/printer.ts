@@ -1,19 +1,19 @@
-import { IDevice } from './';
-import { IPrinterDriver } from '../printer-driver';
+import { DeviceInterface } from './';
+import { PrinterDriverInterface } from '../printer-driver';
 import { CommandResponse } from '../types';
 import { BinaryPayload } from '../decoder/types';
 import assert from 'assert';
 
-interface IPrinter extends IDevice {
+interface PrinterInterface extends DeviceInterface {
   print(buffer: Buffer): Promise<CommandResponse>;
 }
 
-export default class Printer implements IPrinter {
+export default class Printer implements PrinterInterface {
   encryptionKey?: string;
   address: string;
-  printerDriver: IPrinterDriver;
+  printerDriver: PrinterDriverInterface;
 
-  constructor(address: string, printerDriver: IPrinterDriver) {
+  constructor(address: string, printerDriver: PrinterDriverInterface) {
     this.address = address;
     this.printerDriver = printerDriver;
   }
