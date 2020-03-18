@@ -1,4 +1,4 @@
-import { CommandLineParser } from '@microsoft/ts-command-line';
+import { CommandLineParser } from '@rushstack/ts-command-line';
 
 import ImageAction from './print/image-action';
 import PayloadAction from './print/payload-action';

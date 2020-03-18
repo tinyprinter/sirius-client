@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import {
   CommandLineAction,
   CommandLineStringParameter,
-} from '@microsoft/ts-command-line';
+} from '@rushstack/ts-command-line';
 import ConsoleDriver from '../../printer-driver/console';
 
 import process from '../../image-processor';
