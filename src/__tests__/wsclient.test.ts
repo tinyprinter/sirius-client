@@ -14,11 +14,15 @@ describe('wsclient', () => {
         address: 'address',
         encryptionKey: undefined,
 
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         handlePayload: async payload => {},
       },
 
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       connect: async (): Promise<CommandResponse> => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       heartbeat: async (): Promise<CommandResponse> => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       handle: async (command: Command): Promise<CommandResponse> => {},
     };
   });
