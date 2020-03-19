@@ -4,13 +4,16 @@ import { CommandPayload } from '../types';
 
 import unrle from './unrle';
 
-// There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now. What do we have, if we don't trust blindly?
+// There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now.
+// Since we're only expecting images, it's a reasonably safe to assume the shape of the important parts.
+//
+// What do we have, if we don't trust blindly?
 export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxPrinterSpeedParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 4,
     assert: function(arg) {
-      const x: any[] = arg as any;
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x73 && x[2] === 0x03 && x[3] === 0xe8;
     },
   });
@@ -21,7 +24,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
       type: 'uint8',
       length: 3,
       assert: function(arg) {
-        const x: any[] = arg as any;
+        const x = arg as number[];
         return x[0] === 0x1d && x[1] === 0x61 && x[2] === 0xd0;
       },
     });
@@ -30,7 +33,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
     type: 'uint8',
     length: 3,
     assert: function(arg) {
-      const x: any[] = arg as any;
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x2f && x[2] === 0x0f;
     },
   });
@@ -39,7 +42,7 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
     type: 'uint8',
     length: 3,
     assert: function(arg) {
-      const x: any[] = arg as any;
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x44 && x[2] === 0x80;
     },
   });
@@ -110,12 +113,8 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
 
   const result = parser.parse(buf);
 
-  const bytes = await unrle(result.rle.compressed_data as number[]);
-  // const bitmap = bitmapify(bytes);
-
   return {
     length: result.payload_length_with_header_plus_one,
-    // bitmap,
-    bytes,
+    bytes: await unrle(result.rle.compressed_data as number[]),
   };
 };

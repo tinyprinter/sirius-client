@@ -6,6 +6,8 @@ import bmp from 'fast-bmp';
 //   0xff, 0xff, 0xff, 0x00,
 // ]);
 
+const BITMAP_WIDTH = 384;
+
 const setBit = (
   buffer: Uint8Array,
   i: number,
@@ -57,8 +59,8 @@ const packem = (input: number[], width: number, height: number): Uint8Array => {
 
 export default (input: Buffer): Buffer => {
   const bytes = Array.prototype.slice.call(input);
-  const width = 384;
-  const height = input.length / 384;
+  const width = BITMAP_WIDTH;
+  const height = input.length / BITMAP_WIDTH;
 
   return bmp.encode({
     width,

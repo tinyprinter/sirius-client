@@ -13,12 +13,15 @@ class BridgeState {
   }
 }
 
-export default (uri: string, bridge: BridgeInterface): void | number => {
-  // Sanity check websocket connection URL:
+// TODO: should we be responsible in here for reconnecting on failed connections?
+
+export default (uri: string, bridge: BridgeInterface): void => {
+  // Check websocket connection URL for likely correctness:
   if (!uri.endsWith('/api/v1/connection')) {
     console.log("Websocket URL must end with '/api/v1/connection'");
     console.log(`Maybe you meant ${uri}/api/v1/connection ?`);
-    return 1;
+
+    throw new Error('invalid websocket URI');
   }
 
   const ws = new WebSocket(uri);
