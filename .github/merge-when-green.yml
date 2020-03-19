@@ -1,2 +1,3 @@
 requiredChecks:
-  - github
+  - yarn lint / lint (pull_request)
+  - yarn test / test (pull_request)
