@@ -63,7 +63,9 @@ export default class RunAction extends CommandLineAction {
     this._driver = this.defineStringParameter({
       argumentName: 'DRIVER',
       environmentVariable: 'PRINTER_DRIVER',
-      description: 'Printer driver to use. ("console" or "filesystem", defaults to "console")',
+      description:
+        'Printer driver to use. ("console" or "filesystem", defaults to "console")',
+      defaultValue: 'console',
       parameterLongName: '--driver',
       parameterShortName: '-d',
     });

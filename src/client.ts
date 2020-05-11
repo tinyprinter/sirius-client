@@ -54,7 +54,11 @@ const parsePrinterDataFile = async (
   };
 };
 
-export default async (uri: string, printerDataPath?: string, driver?: string): Promise<void> => {
+export default async (
+  uri: string,
+  printerDataPath?: string,
+  driver?: string
+): Promise<void> => {
   let config: Config | null = null;
 
   if (printerDataPath == null) {
@@ -87,7 +91,7 @@ export default async (uri: string, printerDataPath?: string, driver?: string): P
   console.log('-----------------------------');
 
   let printerDriver = null;
-  switch(driver) {
+  switch (driver) {
     case 'console':
       printerDriver = new ConsolePrinterDriver();
       break;
