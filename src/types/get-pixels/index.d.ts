@@ -1,10 +1,10 @@
 declare module 'get-pixels' {
-  interface Pixels {}
+  import ndarray from 'ndarray';
 
   function getPixels(
     buffer: Buffer,
     type: string,
-    callback: (err: any, pixels: Pixels) => void
+    callback: (err: any, pixels: ndarray) => void
   ): void;
   export = getPixels;
 }

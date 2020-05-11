@@ -23,9 +23,10 @@ export interface CommandHeader {
   length: number;
 }
 
-export interface CommandPayloadHeader {}
+// export interface CommandPayloadHeader {}
 
 export interface CommandPayload {
   length: number;
-  bitmap: Buffer;
+  // bitmap: Buffer;
+  bytes: Buffer;
 }

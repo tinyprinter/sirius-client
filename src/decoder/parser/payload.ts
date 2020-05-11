@@ -4,13 +4,16 @@ import { CommandPayload } from '../types';
 
 import unrle from './unrle';
 
-// There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now. What do we have, if we don't trust blindly?
+// There are a small pile of checks & balances here for file sizes and whatnot, but yolo seems fine for now.
+// Since we're only expecting images, it's a reasonably safe to assume the shape of the important parts.
+//
+// What do we have, if we don't trust blindly?
 export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxPrinterSpeedParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 4,
-    assert: arg => {
-      const x: any[] = arg as any;
+    assert: function(arg) {
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x73 && x[2] === 0x03 && x[3] === 0xe8;
     },
   });
@@ -20,8 +23,8 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
     .array('data', {
       type: 'uint8',
       length: 3,
-      assert: arg => {
-        const x: any[] = arg as any;
+      assert: function(arg) {
+        const x = arg as number[];
         return x[0] === 0x1d && x[1] === 0x61 && x[2] === 0xd0;
       },
     });
@@ -29,8 +32,8 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const peakCurrentParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 3,
-    assert: arg => {
-      const x: any[] = arg as any;
+    assert: function(arg) {
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x2f && x[2] === 0x0f;
     },
   });
@@ -38,8 +41,8 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
   const maxIntensityParser = new Parser().endianess('little').array('data', {
     type: 'uint8',
     length: 3,
-    assert: arg => {
-      const x: any[] = arg as any;
+    assert: function(arg) {
+      const x = arg as number[];
       return x[0] === 0x1d && x[1] === 0x44 && x[2] === 0x80;
     },
   });
@@ -61,18 +64,30 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
 
   const printerDataParser = new Parser()
     .endianess('little')
-    .uint8('static1', { assert: x => x === 0x1b })
-    .uint8('static2', { assert: x => x === 0x2a })
+    .uint8('static1', {
+      assert: 0x1b,
+    })
+    .uint8('static2', {
+      assert: 0x2a,
+    })
     .uint8('n1')
     .uint8('n2')
     .uint8('n3')
-    .uint8('static3', { assert: x => x === 0x0 })
-    .uint8('static4', { assert: x => x === 0x0 })
-    .uint8('static5', { assert: x => x === 0x30 });
+    .uint8('static3', {
+      assert: 0x0,
+    })
+    .uint8('static4', {
+      assert: 0x0,
+    })
+    .uint8('static5', {
+      assert: 0x30,
+    });
 
   const rleParser = new Parser()
     .endianess('little')
-    .uint8('type', { assert: x => x === 0x1 }) // assume compressed
+    .uint8('type', {
+      assert: 0x1,
+    }) // assume compressed
     .uint32('compressed_length')
     .array('compressed_data', {
       type: 'uint8',
@@ -98,10 +113,8 @@ export default async (buf: Buffer, offset: number): Promise<CommandPayload> => {
 
   const result = parser.parse(buf);
 
-  const bitmap = await unrle(result.rle.compressed_data as number[]);
-
   return {
     length: result.payload_length_with_header_plus_one,
-    bitmap,
+    bytes: await unrle(result.rle.compressed_data as number[]),
   };
 };

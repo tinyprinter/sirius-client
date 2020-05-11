@@ -2,18 +2,18 @@ import { Parser } from 'binary-parser';
 
 import { CommandHeader } from '../types';
 
-const header = (buf: Buffer, offset: number = 0): CommandHeader => {
+const header = (buf: Buffer, offset = 0): CommandHeader => {
   const parser = new Parser()
     .endianess('little')
     .skip(offset)
     .uint8('deviceId')
     .uint8('unused', {
-      assert: x => x === 0,
+      assert: 0x0,
     })
     .uint16('commandId')
     .uint32('printId')
     .uint32('crc', {
-      assert: x => x === 0,
+      assert: 0x0,
     })
     .uint32('length');
 

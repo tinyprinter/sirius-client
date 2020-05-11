@@ -1,14 +1,19 @@
-// import { padImageData, createBitmapFile } from '@ericandrewlewis/bitmap';
 import bmp from 'fast-bmp';
-import fs from 'fs';
 
 // prettier-ignore
-const colorTable = Buffer.from([
-  0x00, 0x00, 0x00, 0x00,
-  0xff, 0xff, 0xff, 0x00,
-]);
+// const colorTable = Buffer.from([
+//   0x00, 0x00, 0x00, 0x00,
+//   0xff, 0xff, 0xff, 0x00,
+// ]);
 
-const setBit = (buffer: Uint8Array, i: number, bit: number, value: number) => {
+const BITMAP_WIDTH = 384;
+
+const setBit = (
+  buffer: Uint8Array,
+  i: number,
+  bit: number,
+  value: number
+): void => {
   if (value == 0) {
     buffer[i] &= ~(1 << bit);
   } else {
@@ -52,14 +57,15 @@ const packem = (input: number[], width: number, height: number): Uint8Array => {
   return buf;
 };
 
-export default (input: number[]): Buffer => {
-  const width = 384;
-  const height = input.length / 384;
+export default (input: Buffer): Buffer => {
+  const bytes = Array.prototype.slice.call(input);
+  const width = BITMAP_WIDTH;
+  const height = input.length / BITMAP_WIDTH;
 
   return bmp.encode({
     width,
     height,
-    data: Buffer.from(packem(input, width, height)),
+    data: Buffer.from(packem(bytes, width, height)),
     bitDepth: 1,
     components: 1,
     channels: 1,

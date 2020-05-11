@@ -1,24 +1,27 @@
 import WebSocket from 'ws';
 
-import { IBridge, Command } from './bridge';
+import { BridgeInterface, Command } from './bridge';
 import assert from 'assert';
 
 class BridgeState {
-  isOnline: boolean = true;
-  needsKey: boolean = true;
-  bridge: IBridge;
+  isOnline = true;
+  needsKey = true;
+  bridge: BridgeInterface;
 
-  constructor(bridge: IBridge) {
+  constructor(bridge: BridgeInterface) {
     this.bridge = bridge;
   }
 }
 
-export default (uri: string, bridge: IBridge) => {
-  // Sanity check websocket connection URL:
+// TODO: should we be responsible in here for reconnecting on failed connections?
+
+export default (uri: string, bridge: BridgeInterface): void => {
+  // Check websocket connection URL for likely correctness:
   if (!uri.endsWith('/api/v1/connection')) {
     console.log("Websocket URL must end with '/api/v1/connection'");
     console.log(`Maybe you meant ${uri}/api/v1/connection ?`);
-    return 1;
+
+    throw new Error('invalid websocket URI');
   }
 
   const ws = new WebSocket(uri);
@@ -31,7 +34,7 @@ export default (uri: string, bridge: IBridge) => {
     `connecting to ${uri} as: bridge: ${bridge.address}, device: ${bridge.device.address}`
   );
 
-  const heartbeat = async () => {
+  const heartbeat = async (): Promise<void> => {
     if (state.isOnline) {
       ws.send(await state.bridge.heartbeat());
     } else {
