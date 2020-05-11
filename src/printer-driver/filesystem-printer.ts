@@ -8,10 +8,10 @@ import path from 'path';
 export default class FilesystemPrinterDriver implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
     return new Promise(resolve => {
-      let tempDir = path.join(os.tmpdir(), 'sirius-client');
+      const tempDir = path.join(os.tmpdir(), 'sirius-client');
       fs.mkdirSync(tempDir, {'recursive': true});
 
-      let tempFile = path.join(tempDir, 'to_print.bmp');
+      const tempFile = path.join(tempDir, 'to_print.bmp');
 
       fs.writeFileSync(tempFile, buffer);
       console.log(`Written: ${tempFile}`);
