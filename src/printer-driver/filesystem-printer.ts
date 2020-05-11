@@ -9,7 +9,7 @@ export default class FilesystemPrinterDriver implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
     return new Promise(resolve => {
       const tempDir = path.join(os.tmpdir(), 'sirius-client');
-      fs.mkdirSync(tempDir, {'recursive': true});
+      fs.mkdirSync(tempDir, {recursive: true});
 
       const tempFile = path.join(tempDir, 'to_print.bmp');
 
