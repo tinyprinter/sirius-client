@@ -11,6 +11,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // const uri = 'ws://localhost:5000/api/v1/connection';
 const uri = 'wss://littleprinter.nordprojects.co/api/v1/connection';
 const printerDataPath = 'fixtures/fb1f6abb95f9b129.printer';
+//const printerDataPath = 'fixtures/0aaab8e735e378b4.printer';
 
 
 const printerData = fs.readFileSync(printerDataPath).toString();
