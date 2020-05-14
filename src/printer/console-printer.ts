@@ -1,15 +1,19 @@
 import termImg from 'term-img';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
 import { BergPrinterPrinterPrinter } from '../berger/device/printer';
-import bitmapify from '../bitmapify';
+import PrintableImage from '../printable-image';
 
 export default class ConsolePrinter implements BergPrinterPrinterPrinter {
-  print(bits: Buffer, payload: BergPrinterPayload): Promise<boolean> {
-    return new Promise((resolve) => {
+  async print(
+    image: PrintableImage,
+    payload: BergPrinterPayload
+  ): Promise<boolean> {
+    return new Promise(async (resolve) => {
       console.log('printing image: ', payload);
 
-      const bitmap = bitmapify(bits);
+      const bitmap = await image.asPNG();
       termImg(bitmap);
+
       resolve(true);
     });
   }

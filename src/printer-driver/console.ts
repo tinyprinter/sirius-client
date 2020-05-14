@@ -6,7 +6,7 @@ import termImg from 'term-img';
 
 export default class ConsolePrinterDriver implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const bitmap = bitmapify(buffer);
       termImg(bitmap);
       resolve();

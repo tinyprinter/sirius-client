@@ -1,4 +1,4 @@
-import USB from 'escpos-usb';
+import Bluetooth from 'escpos-bluetooth';
 import { promisify } from 'util';
 
 import { BergPrinterPrinterPrinter } from '../berger/device/printer';
@@ -6,7 +6,7 @@ import { BergPrinterPrinterPrinter } from '../berger/device/printer';
 import * as paperang from './commander/paperang';
 import PrintableImage from '../printable-image';
 
-const usb = new USB();
+const bluetooth = new Bluetooth();
 const open = promisify(usb.open).bind(usb);
 const close = promisify(usb.close).bind(usb);
 const write = promisify(usb.write).bind(usb);

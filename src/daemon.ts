@@ -9,21 +9,17 @@ const network = new BergBridgeNetworkWS(
   'wss://littleprinter.nordprojects.co/api/v1/connection'
 );
 
-const printer1 = new BergPrinter(
-  { address: '11cc0f6aaeb07dad' },
-  new USBPaperangPrinter()
-);
-// const printer2 = new BergPrinter(
-//   { address: '2cadfa9fdad2c46a' },
-//   new ConsolePrinter()
-// );
+const printer = new USBPaperangPrinter();
+
+const printer1 = new BergPrinter({ address: '11cc0f6aaeb07dad' }, printer);
+const printer2 = new BergPrinter({ address: '2cadfa9fdad2c46a' }, printer);
 
 const bridge = new BergBridge(
   {
     address: 'eda10fe5b042c000',
   },
   network,
-  [printer1]
+  [printer1, printer2]
 );
 
 const daemon = async (): Promise<void> => {

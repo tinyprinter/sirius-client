@@ -9,11 +9,15 @@ import BergDevice, {
 import payloadDecoder, { BergPrinterPayload } from './payload-decoder';
 import { BergDeviceCommandPayload } from '../payload-decoder';
 import unrle from './unrle';
+import PrintableImage from '../../../printable-image';
 
 const LITTLE_PRINTER_DEVICE_ID = 1;
 
 export interface BergPrinterPrinterPrinter {
-  print(bits: Buffer, payload: BergPrinterPayload): Promise<boolean>;
+  print(
+    image: PrintableImage,
+    payload: BergPrinterPayload | undefined
+  ): Promise<boolean>;
 }
 
 export enum BergPrinterCommandName {
@@ -100,8 +104,9 @@ class BergPrinter extends BaseBergDevice implements BergDevice {
       const decoded = await payloadDecoder(buffer);
       const bits = await unrle(decoded.rle.data);
 
-      // TODO: should probably wrap this into an object with helper methods for bmp,png,resize,etc?
-      return await this.printerprinter.print(bits, decoded);
+      const image = PrintableImage.fromBits(bits);
+
+      return await this.printerprinter.print(image, decoded);
     }
 
     return false;

@@ -1,8 +1,8 @@
-import { USB } from 'escpos';
 import CRC from './crc';
 import packetify from './packetify';
 import segmenter from './segmenter';
 import * as args from './args';
+import PrintableImage from '../../../printable-image';
 
 // via sharperang:
 // public enum Model {
@@ -27,23 +27,6 @@ const MagicValue = 0x35769521;
 
 const crc = new CRC(0x77c40d4d ^ MagicValue);
 
-const initialise = (usb: USB) => {
-  // for now, I only know we support P2S, so let's do some checking here...
-  const VENDOR_ID = 0x20d1;
-  const P2S_PRODUCT_ID = 0x7008;
-
-  const some = usb as any;
-  const { idVendor, idProduct } = some.device.deviceDescriptor;
-
-  if (idVendor !== VENDOR_ID || idProduct !== P2S_PRODUCT_ID) {
-    console.log(
-      "⚠️ warning! this only officially supports Paperang P2S, and this ain't one. there may be dragons!"
-    );
-  } else {
-    console.log("found Paperang P2S, let's disco!");
-  }
-};
-
 const handshake = (): Buffer => {
   return packetify(Opcodes.TransmitCrc, crc.ivBytes, new CRC(MagicValue));
 };
@@ -56,12 +39,15 @@ const noop = (): Buffer => {
   return packetify(Opcodes.NoOp, Buffer.from('\x00\x00', 'ascii'), crc);
 };
 
-const imageSegments = async (image: Buffer): Promise<Buffer[]> => {
-  // note: p2 lines need to be 72 bytes wide (576px), where we only plan on 48 (384px) wide. let's pad it with whitespace if necessary.
-  const segments = await segmenter(image);
+const imageSegments = async (image: PrintableImage): Promise<Buffer[]> => {
+  const pixels = await image.asPixels();
+  const segments = await segmenter(pixels);
 
   const joined = segments.map((segment) => {
-    const additional = 72 - segment.length;
+    // note: p2 lines need to be 72 bytes wide (576px), input by default is 48 (384px) wide
+    // we've resized to full width by now hopefully, so np, but keep this here for now
+    // TODO: check width, pad if necessary
+    const additional = 0; //72 - segment.length;
 
     if (additional > 0) {
       const white = Buffer.from('\x00'.repeat(additional));
@@ -76,4 +62,4 @@ const imageSegments = async (image: Buffer): Promise<Buffer[]> => {
   });
 };
 
-export { handshake, initialise, feed, imageSegments, noop };
+export { handshake, feed, imageSegments, noop };

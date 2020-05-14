@@ -1,40 +1,10 @@
-import getPixels from 'get-pixels';
-import gm from 'gm';
 import ndarray from 'ndarray';
 
-const im = gm.subClass({ imageMagick: true });
-
-const pnger = async (buf: Buffer): Promise<Buffer> => {
-  return new Promise((resolve, reject) => {
-    im(buf)
-      .colors(2)
-      .define('png:bit-depth=1')
-      .toBuffer('PNG', (err, out) => {
-        if (err) {
-          return reject(err);
-        }
-
-        return resolve(out);
-      });
-  });
-};
-
-const pixeler = async (buf: Buffer): Promise<ndarray> => {
-  return new Promise((resolve, reject) => {
-    getPixels(buf, 'image/png', (err, pixels) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(pixels);
-    });
-  });
-};
-
-const segmenter = async (image: Buffer): Promise<Buffer[]> => {
-  const pixels = await pixeler(await pnger(image));
-
+const segmenter = async (pixels: ndarray): Promise<Buffer[]> => {
   let data = [];
-  function rgb(pixel: number[]) {
+  function rgb(
+    pixel: number[]
+  ): { r: number; g: number; b: number; a: number } {
     return {
       r: pixel[0],
       g: pixel[1],
@@ -46,18 +16,18 @@ const segmenter = async (image: Buffer): Promise<Buffer[]> => {
   for (let i = 0; i < pixels.data.length; i += pixels.shape[2]) {
     data.push(
       rgb(
-        new Array(pixels.shape[2]).fill(0).map(function(_, b) {
+        new Array(pixels.shape[2]).fill(0).map(function (_, b) {
           return pixels.data[i + b];
         })
       )
     );
   }
 
-  data = data.map(pixel => {
+  data = data.map((pixel) => {
     if (pixel.a == 0) {
       return 0;
     }
-    var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+    const shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
     return shouldBeWhite ? 0 : 1;
   });
 
@@ -81,9 +51,6 @@ const segmenter = async (image: Buffer): Promise<Buffer[]> => {
         (rowBits[b * 8 + 6] << 1) |
         (rowBits[b * 8 + 7] << 0);
     }
-    // const preamble = Buffer.from(
-    //   '\x62' + String.fromCharCode(rowBytes.length) + '\x00'
-    // );
 
     buffers.push(Buffer.from(rowBytes));
   }
