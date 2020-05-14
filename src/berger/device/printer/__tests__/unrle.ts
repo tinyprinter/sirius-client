@@ -1,8 +1,10 @@
-import { bloop, decompress } from '../unrle';
+import unrle, { bloop, decompress } from '../unrle';
+
+import fs from 'fs';
 
 describe('unrle', () => {
   describe('bloop', () => {
-    const runner = (input: number[], expected: number[]) => {
+    const runner = (input: number[], expected: number[]): void => {
       const actual = bloop(input);
 
       expect(actual).toEqual(expected);
@@ -26,7 +28,7 @@ describe('unrle', () => {
   });
 
   describe('decompress', () => {
-    const runner = (input: number[], expected: number[]) => {
+    const runner = (input: number[], expected: number[]): void => {
       const actual = decompress(input);
 
       expect(actual).toEqual(expected);
@@ -172,6 +174,20 @@ describe('unrle', () => {
       it('should work at twice at max boundry + 1: [251, 0, 1, 251, 0, 1]', () => {
         runner([251, 0, 1, 251, 0, 1], [252, 252]);
       });
+    });
+  });
+
+  describe('unrle', () => {
+    it('fixture', async () => {
+      const fixture = require('./__data__/rle-image.ts').default;
+      const expected = await fs.readFileSync(
+        __dirname + '/__data__/rle-image.bytes'
+      );
+
+      const result = await unrle(fixture);
+
+      expect(result.length).toBe(59520);
+      expect(result).toEqual(expected);
     });
   });
 });

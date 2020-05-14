@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node-script
+
 import { USB } from 'escpos';
 import { promisify } from 'util';
 import fs from 'fs';
@@ -146,14 +148,14 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
     for (let i = 0; i < pixels.data.length; i += pixels.shape[2]) {
       data.push(
         rgb(
-          new Array(pixels.shape[2]).fill(0).map(function(_, b) {
+          new Array(pixels.shape[2]).fill(0).map(function (_, b) {
             return pixels.data[i + b];
           })
         )
       );
     }
 
-    data = data.map(pixel => {
+    data = data.map((pixel) => {
       if (pixel.a == 0) {
         return 0;
       }
@@ -203,7 +205,7 @@ const pixeler = async (buf: Buffer): Promise<ndarray> => {
     console.log('writing commands');
 
     await write(Buffer.from(header, 'ascii'));
-    buffers.forEach(async buffer => await write(buffer));
+    buffers.forEach(async (buffer) => await write(buffer));
     await write(Buffer.from(footer, 'ascii'));
 
     console.log('...commands written');
