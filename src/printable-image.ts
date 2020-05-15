@@ -72,19 +72,22 @@ class PrintableImage {
   }
 
   resize(width: number): PrintableImage {
-    const gm = this.gm();
-    this.gmState = gm.resize(width);
+    this.gmState = this.gm().resize(width);
 
     return this;
   }
 
   dither(): PrintableImage {
-    const gm = this.gm();
-
-    this.gmState = gm
+    this.gmState = this.gm()
       .colorspace('gray')
       .colors(2) // automatically applies dithering
       .out('-type', 'bilevel'); // putting this here forces it at the end of the command (otherwise `gm` will push it to the start, ruining the effect)
+
+    return this;
+  }
+
+  rotate(degrees: number): PrintableImage {
+    this.gmState = this.gm().rotate('white', degrees);
 
     return this;
   }

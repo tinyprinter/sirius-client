@@ -1,17 +1,21 @@
 import { promises as fs } from 'fs';
 
-import USBPaperangPrinter from './printer/usb-paperang-printer';
+import { BergPrinterPrinterPrinter } from './berger/device/printer';
 import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
+import USBPaperangPrinter from './printer/usb-paperang-printer';
 import ConsolePrinter from './printer/console-printer';
 
 import PrintableImage from './printable-image';
-import { BergPrinterPrinterPrinter } from './berger/device/printer';
 
-// const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter();
-const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
-  address: '00-15-82-90-1d-76',
-  channel: 6,
-});
+const printer: BergPrinterPrinterPrinter = new ConsolePrinter();
+// const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter(image: { width: 576 });
+// const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
+//   image: { width: 576 },
+//   bluetooth: {
+//     address: '00-15-82-90-1d-76',
+//     channel: 6,
+//   },
+// });
 
 const printImage = async (path: string): Promise<void> => {
   // load file

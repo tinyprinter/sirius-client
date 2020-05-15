@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import { assertType } from 'typescript-is';
 
+import { BergPrinterPrinterPrinter } from './berger/device/printer';
+import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
 import USBPaperangPrinter from './printer/usb-paperang-printer';
 import ConsolePrinter from './printer/console-printer';
 
@@ -9,14 +11,16 @@ import printerPayloadDecoder from './berger/device/printer/payload-decoder';
 import unrle from './berger/device/printer/unrle';
 import { BergDeviceCommandJSON } from './berger/commands/device-command';
 import PrintableImage from './printable-image';
-import { BergPrinterPrinterPrinter } from './berger/device/printer';
-import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
 
-// const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter();
-const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
-  address: '00-15-82-90-1d-76',
-  channel: 6,
-});
+const printer: BergPrinterPrinterPrinter = new ConsolePrinter();
+// const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter(image: { width: 576 });
+// const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
+//   image: { width: 576 },
+//   bluetooth: {
+//     address: '00-15-82-90-1d-76',
+//     channel: 6,
+//   },
+// });
 
 const printPayload = async (path: string): Promise<void> => {
   // load file

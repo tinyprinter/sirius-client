@@ -13,6 +13,8 @@ import PrintableImage from '../../../printable-image';
 
 const LITTLE_PRINTER_DEVICE_ID = 1;
 
+// TODO: this is leaky, we should only send bits here. but also, we want printers to only care about images. need a thin translation layer
+// truth be told, this should just pass the payload over, and transforming should happen outside in the translation layer
 export interface BergPrinterPrinterPrinter {
   print(
     image: PrintableImage,

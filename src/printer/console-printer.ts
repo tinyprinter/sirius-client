@@ -11,6 +11,11 @@ export default class ConsolePrinter implements BergPrinterPrinterPrinter {
     return new Promise(async (resolve) => {
       console.log('printing image: ', payload);
 
+      // if we've come from a payload, it must be upside down
+      if (payload != null) {
+        image.rotate(180).resize(752);
+      }
+
       const bitmap = await image.asPNG();
       termImg(bitmap);
 

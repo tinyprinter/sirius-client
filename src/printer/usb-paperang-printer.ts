@@ -11,7 +11,19 @@ const open = promisify(usb.open).bind(usb);
 const close = promisify(usb.close).bind(usb);
 const write = promisify(usb.write).bind(usb);
 
+export type USBPaperangParameters = {
+  image: {
+    width: number;
+  };
+};
+
 export default class USBPaperangPrinter implements BergPrinterPrinterPrinter {
+  parameters: USBPaperangParameters;
+
+  constructor(parameters: USBPaperangParameters) {
+    this.parameters = parameters;
+  }
+
   async print(image: PrintableImage): Promise<boolean> {
     // for now, I only know we support P2S, so let's do some checking here...
     const VENDOR_ID = 0x20d1;
@@ -28,7 +40,7 @@ export default class USBPaperangPrinter implements BergPrinterPrinterPrinter {
     }
 
     // note: p2 lines need to be 72 bytes wide (576px), input by default is 48 (384px) wide
-    image.resize(576);
+    image.resize(this.parameters.image.width);
 
     console.log('opening usb');
     await open();
