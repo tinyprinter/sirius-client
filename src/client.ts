@@ -4,6 +4,9 @@ import wsclient from './wsclient';
 import Bridge from './bridge';
 import Printer from './device/printer';
 import ConsolePrinterDriver from './printer-driver/console';
+import FilesystemPrinterDriver from './printer-driver/filesystem-printer';
+// import EscposPrinter from './printer-driver/escpos';
+// import StarPrinterDriver from './printer-driver/star';
 
 const readFile = promisify(fs.readFile);
 
@@ -51,7 +54,11 @@ const parsePrinterDataFile = async (
   };
 };
 
-export default async (uri: string, printerDataPath?: string): Promise<void> => {
+export default async (
+  uri: string,
+  printerDataPath?: string,
+  driver?: string
+): Promise<void> => {
   let config: Config | null = null;
 
   if (printerDataPath == null) {
@@ -83,7 +90,23 @@ export default async (uri: string, printerDataPath?: string): Promise<void> => {
   console.log(config);
   console.log('-----------------------------');
 
-  const printerDriver = new ConsolePrinterDriver();
+  let printerDriver = null;
+  switch (driver) {
+    case 'console':
+      printerDriver = new ConsolePrinterDriver();
+      break;
+    case 'filesystem':
+      printerDriver = new FilesystemPrinterDriver();
+      break;
+    // case 'escpos':
+    //   printerDriver = new EscposPrinter();
+    //   break;
+    // case 'star':
+    //   printerDriver = new StarPrinterDriver();
+    //   break;
+    default:
+      printerDriver = new ConsolePrinterDriver();
+  }
   const device = new Printer(config.deviceAddress, printerDriver);
   const bridge = new Bridge(config.bridgeAddress, device);
 

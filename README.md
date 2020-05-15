@@ -37,7 +37,7 @@ Create a `fixtures/my-printer.printer` file, and enter something like the follow
 Then we run a command:
 
 ```
-yarn ts-node bin/client.ts run --uri wss://littleprinter.nordprojects.co/api/v1/connection -p ./my-printer.printer
+yarn ts-node bin/client.ts run --uri wss://littleprinter.nordprojects.co/api/v1/connection -p ./my-printer.printer --driver console
 ```
 
 You should get a connection to the server. Great. The server can recognise our claim code! Enter the claim code on the server, then you should be ready to start firing print commands to it.

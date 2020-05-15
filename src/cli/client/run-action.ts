@@ -8,6 +8,7 @@ import client from '../../client';
 export default class RunAction extends CommandLineAction {
   private _uri?: CommandLineStringParameter;
   private _printerDataPath?: CommandLineStringParameter;
+  private _driver?: CommandLineStringParameter;
 
   public constructor() {
     super({
@@ -26,14 +27,19 @@ export default class RunAction extends CommandLineAction {
       throw new Error('_printerDataPath not defined on action');
     }
 
+    if (this._driver == null) {
+      throw new Error('_driver not defined on action');
+    }
+
     if (this._uri.value == null) {
       throw new Error('_uri has no value');
     }
 
     const uri = this._uri.value;
     const printerDataPath = this._printerDataPath.value;
+    const driver = this._driver.value;
 
-    return await client(uri, printerDataPath);
+    return await client(uri, printerDataPath, driver);
   }
 
   protected onDefineParameters(): void {
@@ -52,6 +58,16 @@ export default class RunAction extends CommandLineAction {
       description: 'Path to .printer data file (relative to project root)',
       parameterLongName: '--printer-data-path',
       parameterShortName: '-p',
+    });
+
+    this._driver = this.defineStringParameter({
+      argumentName: 'DRIVER',
+      environmentVariable: 'PRINTER_DRIVER',
+      description:
+        'Printer driver to use. ("console" or "filesystem", defaults to "console")',
+      defaultValue: 'console',
+      parameterLongName: '--driver',
+      parameterShortName: '-d',
     });
   }
 }
