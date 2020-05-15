@@ -62,3 +62,12 @@ Future ideas include:
 ## How can I help?
 
 Right now, you probably can't very much. I'll tidy this up, add some tests, and then it's in a better shape for collaborating.
+
+## Notes
+
+post-install copy doesn't seem to work, so for bluetooth:
+
+```sh
+mkdir ./node_modules/node-bluetooth/build
+cp ./node_modules/bluetooth-serial-port/build/Release/BluetoothSerialPort.node ./node_modules/node-bluetooth/build
+```
