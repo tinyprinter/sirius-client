@@ -9,7 +9,8 @@ const network = new BergBridgeNetworkWS(
   'wss://littleprinter.nordprojects.co/api/v1/connection'
 );
 
-const printer = new USBPaperangPrinter();
+// const printer = new USBPaperangPrinter({ image: { width: 576 } });
+const printer = new ConsolePrinter();
 
 const printer1 = new BergPrinter({ address: '11cc0f6aaeb07dad' }, printer);
 const printer2 = new BergPrinter({ address: '2cadfa9fdad2c46a' }, printer);
