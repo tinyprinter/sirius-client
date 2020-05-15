@@ -605,6 +605,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.1.tgz#5d93e0a099cd0acd5ef3d5bde3c086e1f49ff68c"
   integrity sha512-FAYBGwC+W6F9+huFIDtn43cpy7+SzG+atzRiTfdp3inUKL2hXnd4rG8hylJLIh4+hqrQy1P17kvJByE/z825hA==
 
+"@types/node@^7.0.10":
+  version "7.10.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.10.10.tgz#af1d109f45cda5bd7510035f0fda0c2e13e3ec15"
+  integrity sha512-gvuWz7pNex4xCFqk/2Z/x1J4AO7kZxgv4iSZH0dwZHYiFuO7rQr06xnBoiarrd8bcOxlqQCFv7MsKcAVq3FFfQ==
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
@@ -989,6 +994,11 @@ binary-parser@^1.4.0:
   resolved "https://registry.yarnpkg.com/binary-parser/-/binary-parser-1.6.2.tgz#8410a82ffd9403271ec182bd91e63a09cee88cbe"
   integrity sha512-cYAhKB51A9T/uylDvMK7uAYaPLWLwlferNOpnQ0E0fuO73yPi7kWaWiOm22BvuKxCbggmkiFN0VkuLg6gc+KQQ==
 
+bindings@1.2.x:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
+  integrity sha1-FK1hE4EtLTfXLme0ystLtyZQXxE=
+
 bindings@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
@@ -1004,6 +1014,17 @@ bl@^4.0.1:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
+
+bluetooth-serial-port@^2.2.7:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/bluetooth-serial-port/-/bluetooth-serial-port-2.2.7.tgz#6a0b09a2bac760e3a4b82e795ae1b1f0d4cda82e"
+  integrity sha512-R/ozYD6bUPBaYstowIwPPezZph2zW84Icryh02vVJYQxWuAcigxSoZRljbvp4IEGMWwjREArLQCKxT6B/ME60A==
+  dependencies:
+    bindings "1.2.x"
+    nan latest
+    stable "^0.1.8"
+  optionalDependencies:
+    "@types/node" "^7.0.10"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3226,6 +3247,11 @@ nan@2.13.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.2.tgz#f51dc7ae66ba7d5d55e1e6d4d8092e802c9aefe7"
   integrity sha512-TghvYc72wlMGMVMluVo9WRJc0mB8KxxF/gZ4YYFy7V2ZQX9l7rgbPg7vjS9mt6U5HXODVFVI2bOduCzwOMv/lw==
 
+nan@latest:
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
+  integrity sha512-isWHgVjnFjh2x2yuJ/tj3JbwoHu3UC2dX5G/88Cm24yB6YopVgxvBObDY7n5xW6ExmFhJpSEQqFPvq9zaXc8Jw==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -4205,6 +4231,11 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
+
+stable@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/stable/-/stable-0.1.8.tgz#836eb3c8382fe2936feaf544631017ce7d47a3cf"
+  integrity sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==
 
 stack-utils@^2.0.2:
   version "2.0.2"

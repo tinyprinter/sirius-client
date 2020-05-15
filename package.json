@@ -34,6 +34,7 @@
   "dependencies": {
     "@rushstack/ts-command-line": "^4.3.14",
     "binary-parser": "^1.4.0",
+    "bluetooth-serial-port": "^2.2.7",
     "escpos": "^3.0.0-alpha.3",
     "escpos-usb": "^3.0.0-alpha.2",
     "fast-bmp": "^1.0.0",

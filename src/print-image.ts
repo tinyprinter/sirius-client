@@ -1,11 +1,13 @@
 import { promises as fs } from 'fs';
 
 import USBPaperangPrinter from './printer/usb-paperang-printer';
-import PrintableImage from './printable-image';
-import { BergPrinterPrinterPrinter } from './berger/device/printer';
+import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
 import ConsolePrinter from './printer/console-printer';
 
-const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter();
+import PrintableImage from './printable-image';
+import { BergPrinterPrinterPrinter } from './berger/device/printer';
+
+const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter();
 
 const printImage = async (path: string): Promise<void> => {
   // load file
