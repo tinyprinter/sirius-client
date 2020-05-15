@@ -10,8 +10,13 @@ import unrle from './berger/device/printer/unrle';
 import { BergDeviceCommandJSON } from './berger/commands/device-command';
 import PrintableImage from './printable-image';
 import { BergPrinterPrinterPrinter } from './berger/device/printer';
+import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
 
-const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter();
+// const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter();
+const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
+  address: '00-15-82-90-1d-76',
+  channel: 6,
+});
 
 const printPayload = async (path: string): Promise<void> => {
   // load file

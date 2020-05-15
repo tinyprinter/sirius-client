@@ -5,7 +5,7 @@ declare module 'escpos-bluetooth' {
     constructor(address: string, channel: number);
 
     static findPrinters(): Promise<
-      [{ address: string; name: string; channel: number }] | undefined
+      [{ address: string; name: string; channel: number } | undefined]
     >;
     static getDevice(address: string, channel: number): Promise<Bluetooth>;
 

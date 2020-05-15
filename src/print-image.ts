@@ -7,7 +7,11 @@ import ConsolePrinter from './printer/console-printer';
 import PrintableImage from './printable-image';
 import { BergPrinterPrinterPrinter } from './berger/device/printer';
 
-const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter();
+// const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter();
+const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
+  address: '00-15-82-90-1d-76',
+  channel: 6,
+});
 
 const printImage = async (path: string): Promise<void> => {
   // load file

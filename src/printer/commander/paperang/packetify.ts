@@ -10,7 +10,7 @@ const packetify = (
   data: Buffer,
   checksum: CRC
 ): Buffer => {
-  let packet = Buffer.alloc(1 + operation.length + data.length + 5);
+  const packet = Buffer.alloc(1 + operation.length + data.length + 5);
 
   packet.write(Packet.Start, 0, 'ascii');
   packet.write(Packet.End, packet.length - 1, 'ascii');
