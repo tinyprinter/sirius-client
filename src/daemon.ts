@@ -2,16 +2,13 @@ import BergBridge from './berger/bridge';
 import BergBridgeNetworkWS from './berger/bridge/network/ws';
 import BergPrinter from './berger/device/printer';
 
-import ConsolePrinter from './printer/console-printer';
-import USBPaperangPrinter from './printer/usb-paperang-printer';
 import PrintableImageWrapper from './printer/printable-image-handler';
 
 const network = new BergBridgeNetworkWS(
   'wss://littleprinter.nordprojects.co/api/v1/connection'
 );
 
-// const printer = new USBPaperangPrinter({ image: { width: 576 } });
-const printer = new ConsolePrinter();
+import printer from './default-printer';
 
 const printer1 = new BergPrinter(
   { address: '11cc0f6aaeb07dad' },

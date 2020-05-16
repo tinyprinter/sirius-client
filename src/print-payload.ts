@@ -12,15 +12,7 @@ import unrle from './berger/device/printer/unrle';
 import { BergDeviceCommandJSON } from './berger/commands/device-command';
 import PrintableImage from './printable-image';
 
-const printer: PrintableImageHandler = new ConsolePrinter();
-// const printer: PrintableImageHandler = new USBPaperangPrinter(image: { width: 576 });
-// const printer: PrintableImageHandler = new BluetoothPaperangPrinter({
-//   image: { width: 576 },
-//   bluetooth: {
-//     address: '00-15-82-90-1d-76',
-//     channel: 6,
-//   },
-// });
+import printer from './default-printer';
 
 const printPayload = async (path: string): Promise<void> => {
   // load file
