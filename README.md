@@ -65,9 +65,17 @@ Right now, you probably can't very much. I'll tidy this up, add some tests, and 
 
 ## Notes
 
+### post-install for bluetooth
+
 post-install copy doesn't seem to work, so for bluetooth:
 
 ```sh
 mkdir ./node_modules/node-bluetooth/build
 cp ./node_modules/bluetooth-serial-port/build/Release/BluetoothSerialPort.node ./node_modules/node-bluetooth/build
 ```
+
+### imagemagic
+
+`gm` lib needs imagemagick, so install it before getting too wild
+
+TODO: check for `gm`, output a warning if it's missing
