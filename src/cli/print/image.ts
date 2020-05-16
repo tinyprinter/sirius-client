@@ -1,15 +1,18 @@
-import fs from 'fs';
-import { promisify } from 'util';
+import { promises as fs } from 'fs';
 
 import {
   CommandLineAction,
   CommandLineStringParameter,
 } from '@rushstack/ts-command-line';
-import ConsoleDriver from '../../printer-driver/console';
+import PrintableImage from '../../printable-image';
+import { PrintableImageHandler } from '../../printer/printable-image-handler';
+// import ConsoleDriver from '../../printer-driver/console';
 
-import process from '../../image-processor';
+// import process from '../../image-processor';
 
-const readFile = promisify(fs.readFile);
+// const readFile = promisify(fs.readFile);
+
+import printer from '../../default-printer';
 
 export default class ImageAction extends CommandLineAction {
   private _imagePath?: CommandLineStringParameter;
@@ -27,18 +30,20 @@ export default class ImageAction extends CommandLineAction {
     if (this._imagePath == null) {
       throw new Error('_imagePath not defined on action');
     }
-
     if (this._imagePath.value == null) {
       throw new Error('_imagePath has no value');
     }
 
-    const imagePath = this._imagePath.value;
-    const source = await readFile(imagePath);
-    const processed = await process(source);
+    const path = this._imagePath.value;
 
-    const driver = new ConsoleDriver();
+    // load file
+    const buffer = await fs.readFile(path);
 
-    return await driver.print(processed);
+    const image = new PrintableImage(buffer);
+    image.dither();
+
+    // print 'em
+    await (printer as PrintableImageHandler).print(image, undefined);
   }
 
   protected onDefineParameters(): void {

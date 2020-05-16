@@ -1,14 +1,13 @@
 import { CommandLineParser } from '@rushstack/ts-command-line';
 
-import ImageAction from './print/image-action';
-import PayloadAction from './print/payload-action';
+import ImageAction from './print/image';
+import PayloadAction from './print/payload';
 
-export default class PrintCommandLine extends CommandLineParser {
+class Print extends CommandLineParser {
   public constructor() {
     super({
       toolFilename: 'print',
-      toolDescription:
-        'Helpers for printing bits and pieces. Just for fun, but sometimes for profit.',
+      toolDescription: 'Helpers for printing',
     });
 
     this.addAction(new ImageAction());
@@ -23,3 +22,5 @@ export default class PrintCommandLine extends CommandLineParser {
     return super.onExecute();
   }
 }
+
+export default Print;

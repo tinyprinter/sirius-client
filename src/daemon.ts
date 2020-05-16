@@ -43,4 +43,4 @@ const daemon = async (): Promise<void> => {
   }
 };
 
-daemon();
+export default daemon;
