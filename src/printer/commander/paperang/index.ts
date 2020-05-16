@@ -2,7 +2,7 @@ import CRC from './crc';
 import packetify from './packetify';
 import segmenter from './segmenter';
 import * as args from './args';
-import PrintableImage from '../../../printable-image';
+import ndarray from 'ndarray';
 
 // via sharperang:
 // public enum Model {
@@ -39,8 +39,7 @@ const noop = (): Buffer => {
   return packetify(Opcodes.NoOp, Buffer.from('\x00\x00', 'ascii'), crc);
 };
 
-const imageSegments = async (image: PrintableImage): Promise<Buffer[]> => {
-  const pixels = await image.asPixels();
+const imageSegments = async (pixels: ndarray): Promise<Buffer[]> => {
   const segments = await segmenter(pixels);
 
   const joined = segments.map((segment) => {

@@ -1,10 +1,9 @@
 import Bluetooth from 'escpos-bluetooth';
 import { promisify } from 'util';
 
-import { BergPrinterPrinterPrinter } from '../berger/device/printer';
-
 import * as paperang from './commander/paperang';
 import PrintableImage from '../printable-image';
+import { PrintableImageHandler } from './printable-image-handler';
 
 export type BluetoothPaperangParameters = {
   image: {
@@ -16,8 +15,7 @@ export type BluetoothPaperangParameters = {
   };
 };
 
-export default class BluetoothPaperangPrinter
-  implements BergPrinterPrinterPrinter {
+export default class BluetoothPaperangPrinter implements PrintableImageHandler {
   parameters: BluetoothPaperangParameters;
 
   constructor(parameters: BluetoothPaperangParameters) {
@@ -94,7 +92,7 @@ export default class BluetoothPaperangPrinter
       await write(paperang.feed(0));
       await write(paperang.noop());
 
-      const segments = await paperang.imageSegments(image);
+      const segments = await paperang.imageSegments(await image.asPixels());
       for (let i = 0; i < segments.length; i++) {
         await write(segments[i]);
 

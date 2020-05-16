@@ -8,18 +8,11 @@ import BergDevice, {
 
 import payloadDecoder, { BergPrinterPayload } from './payload-decoder';
 import { BergDeviceCommandPayload } from '../payload-decoder';
-import unrle from './unrle';
-import PrintableImage from '../../../printable-image';
 
 const LITTLE_PRINTER_DEVICE_ID = 1;
 
-// TODO: this is leaky, we should only send bits here. but also, we want printers to only care about images. need a thin translation layer
-// truth be told, this should just pass the payload over, and transforming should happen outside in the translation layer
-export interface BergPrinterPrinterPrinter {
-  print(
-    image: PrintableImage,
-    payload: BergPrinterPayload | undefined
-  ): Promise<boolean>;
+export interface BergPrinterHandler {
+  print(payload: BergPrinterPayload): Promise<boolean>;
 }
 
 export enum BergPrinterCommandName {
@@ -37,16 +30,16 @@ export enum BergPrinterCommandName {
 class BergPrinter extends BaseBergDevice implements BergDevice {
   deviceTypeId = LITTLE_PRINTER_DEVICE_ID;
 
-  private printerprinter: BergPrinterPrinterPrinter | null;
+  private printerHandler: BergPrinterHandler | null;
 
   constructor(
     parameters: BergDeviceParameters,
-    printerprinter: BergPrinterPrinterPrinter,
+    printerHandler: BergPrinterHandler,
     argOptions: Partial<BergDeviceOptions> = {}
   ) {
     super(parameters, argOptions);
 
-    this.printerprinter = printerprinter;
+    this.printerHandler = printerHandler;
   }
 
   async handlePayload(
@@ -102,13 +95,10 @@ class BergPrinter extends BaseBergDevice implements BergDevice {
   }
 
   async print(buffer: Buffer): Promise<boolean> {
-    if (this.printerprinter) {
+    if (this.printerHandler) {
       const decoded = await payloadDecoder(buffer);
-      const bits = await unrle(decoded.rle.data);
 
-      const image = PrintableImage.fromBits(bits);
-
-      return await this.printerprinter.print(image, decoded);
+      return await this.printerHandler.print(decoded);
     }
 
     return false;

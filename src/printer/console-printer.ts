@@ -1,9 +1,10 @@
 import termImg from 'term-img';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
-import { BergPrinterPrinterPrinter } from '../berger/device/printer';
+import { BergPrinterHandler } from '../berger/device/printer';
 import PrintableImage from '../printable-image';
+import { PrintableImageHandler } from './printable-image-handler';
 
-export default class ConsolePrinter implements BergPrinterPrinterPrinter {
+export default class ConsolePrinter implements PrintableImageHandler {
   async print(
     image: PrintableImage,
     payload: BergPrinterPayload

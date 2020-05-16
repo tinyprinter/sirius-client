@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { assertType } from 'typescript-is';
 
-import { BergPrinterPrinterPrinter } from './berger/device/printer';
+import { PrintableImageHandler } from './printer/printable-image-handler';
 import BluetoothPaperangPrinter from './printer/bluetooth-paperang-printer';
 import USBPaperangPrinter from './printer/usb-paperang-printer';
 import ConsolePrinter from './printer/console-printer';
@@ -12,9 +12,9 @@ import unrle from './berger/device/printer/unrle';
 import { BergDeviceCommandJSON } from './berger/commands/device-command';
 import PrintableImage from './printable-image';
 
-const printer: BergPrinterPrinterPrinter = new ConsolePrinter();
-// const printer: BergPrinterPrinterPrinter = new USBPaperangPrinter(image: { width: 576 });
-// const printer: BergPrinterPrinterPrinter = new BluetoothPaperangPrinter({
+const printer: PrintableImageHandler = new ConsolePrinter();
+// const printer: PrintableImageHandler = new USBPaperangPrinter(image: { width: 576 });
+// const printer: PrintableImageHandler = new BluetoothPaperangPrinter({
 //   image: { width: 576 },
 //   bluetooth: {
 //     address: '00-15-82-90-1d-76',
@@ -37,7 +37,7 @@ const printPayload = async (path: string): Promise<void> => {
   const image = PrintableImage.fromBits(bits);
 
   // print
-  await (printer as BergPrinterPrinterPrinter).print(image, printerPayload);
+  await (printer as PrintableImageHandler).print(image, printerPayload);
 };
 
 const path = __dirname + '/../fixtures/events/DeviceCommand.json';

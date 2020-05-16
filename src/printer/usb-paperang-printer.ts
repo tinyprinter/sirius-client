@@ -1,10 +1,9 @@
 import USB from 'escpos-usb';
 import { promisify } from 'util';
 
-import { BergPrinterPrinterPrinter } from '../berger/device/printer';
-
 import * as paperang from './commander/paperang';
 import PrintableImage from '../printable-image';
+import { PrintableImageHandler } from './printable-image-handler';
 
 const usb = new USB();
 const open = promisify(usb.open).bind(usb);
@@ -17,7 +16,7 @@ export type USBPaperangParameters = {
   };
 };
 
-export default class USBPaperangPrinter implements BergPrinterPrinterPrinter {
+export default class USBPaperangPrinter implements PrintableImageHandler {
   parameters: USBPaperangParameters;
 
   constructor(parameters: USBPaperangParameters) {
@@ -54,7 +53,7 @@ export default class USBPaperangPrinter implements BergPrinterPrinterPrinter {
       await write(paperang.feed(0));
       await write(paperang.noop());
 
-      const segments = await paperang.imageSegments(image);
+      const segments = await paperang.imageSegments(await image.asPixels());
       for (let i = 0; i < segments.length; i++) {
         await write(segments[i]);
       }
