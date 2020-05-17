@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 import * as paperang from './commander/paperang';
 import PrintableImage from '../printable-image';
-import { PrintableImageHandler } from './printable-image-handler';
+import { PrintableImageHandler } from './printable-image-wrapper';
 
 export type BluetoothPaperangParameters = {
   image: {

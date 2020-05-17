@@ -138,5 +138,6 @@ typings/
 
 
 build/
+config/
 dist/
 fixtures/personal/

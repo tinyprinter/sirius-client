@@ -1,10 +1,25 @@
 import termImg from 'term-img';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
-import { BergPrinterHandler } from '../berger/device/printer';
 import PrintableImage from '../printable-image';
-import { PrintableImageHandler } from './printable-image-handler';
+import { PrintableImageHandler } from './printable-image-wrapper';
+import { PrinterConfiguration } from '../config';
 
-export default class ConsolePrinter implements PrintableImageHandler {
+class Console implements PrintableImageHandler {
+  static type = 'console';
+
+  static isConfigurationValid(configuration: PrinterConfiguration): boolean {
+    return true;
+  }
+
+  static fromConfiguration(
+    configuration: PrinterConfiguration
+  ): PrintableImageHandler {
+    return new this();
+  }
+
+  async open(): Promise<void> {}
+  async close(): Promise<void> {}
+
   async print(
     image: PrintableImage,
     payload: BergPrinterPayload
@@ -24,3 +39,5 @@ export default class ConsolePrinter implements PrintableImageHandler {
     });
   }
 }
+
+export default Console;

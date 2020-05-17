@@ -5,7 +5,7 @@ import {
   CommandLineStringParameter,
 } from '@rushstack/ts-command-line';
 import PrintableImage from '../../printable-image';
-import { PrintableImageHandler } from '../../printer/printable-image-handler';
+import { PrintableImageHandler } from '../../printer/printable-image-wrapper';
 // import ConsoleDriver from '../../printer-driver/console';
 
 // import process from '../../image-processor';

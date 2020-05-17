@@ -4,6 +4,8 @@ import PrintableImage from '../printable-image';
 import unrle from '../berger/device/printer/unrle';
 
 export interface PrintableImageHandler {
+  open(): Promise<void>;
+  close(): Promise<void>;
   print(
     image: PrintableImage,
     payload: BergPrinterPayload | undefined

@@ -1,0 +1,30 @@
+printers:
+  printer_console:
+    driver: console
+  printer_paperang:
+    driver: paperang
+    parameters:
+      image:
+        width: 576
+      transport:
+        type: bluetooth
+        parameters:
+          address: 00-11-22-33-44-55
+          channel: 1
+
+network:
+  uri: wss://littleprinter.nordprojects.co/api/v1/connection
+
+bridge:
+  address: abcdef123456
+  devices:
+    device_1:
+      type: littleprinter
+      address: abcdef1234567890
+      secret: 1234567890
+      handler: printer_console
+    device_2:
+      type: littleprinter
+      address: fedcba0987654321
+      secret: 9876543210
+      handler: printer_paperang

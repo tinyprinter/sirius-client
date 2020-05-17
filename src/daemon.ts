@@ -1,37 +1,28 @@
 import BergBridge from './berger/bridge';
-import BergBridgeNetworkWS from './berger/bridge/network/ws';
-import BergPrinter from './berger/device/printer';
 
-import PrintableImageWrapper from './printer/printable-image-handler';
-
-const network = new BergBridgeNetworkWS(
-  'wss://littleprinter.nordprojects.co/api/v1/connection'
-);
-
-import printer from './default-printer';
-
-const printer1 = new BergPrinter(
-  { address: '11cc0f6aaeb07dad' },
-  new PrintableImageWrapper(printer)
-);
-const printer2 = new BergPrinter(
-  { address: '2cadfa9fdad2c46a' },
-  new PrintableImageWrapper(printer)
-);
-
-const bridge = new BergBridge(
-  {
-    address: 'eda10fe5b042c000',
-  },
-  network,
-  [printer1, printer2]
-);
+import parseYaml from './config/parseYaml';
 
 class Daemon {
   private timer: NodeJS.Timeout | undefined = undefined;
   private isShuttingDown = false;
 
+  private bridge: BergBridge | undefined;
+
+  async configure(configurationPath: string): Promise<void> {
+    if (this.bridge != null) {
+      console.log("reconfiguring isn't supported (yet!), ignoring request");
+      return;
+    }
+
+    this.bridge = await parseYaml(configurationPath);
+  }
+
   async run(): Promise<void> {
+    if (this.bridge == null) {
+      console.log('no bridge configured, bailing');
+      return;
+    }
+
     if (this.timer != null) {
       return;
     }
@@ -51,18 +42,30 @@ class Daemon {
 
     this.isShuttingDown = true;
 
-    await bridge.stop();
+    await this.bridge?.stop();
 
     // TODO: close bt/usb
   }
 
   private async runServer(): Promise<void> {
+    if (this.bridge == null) {
+      console.log('no bridge configured, bailing');
+      return;
+    }
+
     try {
-      if (!bridge.isOnline) {
+      if (!this.bridge.isOnline) {
         // TODO: open bt/usb
 
         console.log('starting bridge!');
-        await bridge.start();
+        console.log(`bridge address: ${this.bridge.parameters.address}`);
+        for (let i = 0; i < this.bridge.devices.length; i++) {
+          const device = this.bridge.devices[i];
+          console.log(
+            ` - device #${i + 1} address: ${device.parameters.address}`
+          );
+        }
+        await this.bridge.start();
       }
     } catch (error) {
       console.log(`error, daemon bailed`, error);

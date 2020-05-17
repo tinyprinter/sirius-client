@@ -41,8 +41,9 @@ type BergBridgeCommandResponseJSON = object;
 
 class BergBridge {
   private state: State;
-  private parameters: BergBridgeParamaters;
   private network: BergBridgeNetwork;
+
+  parameters: BergBridgeParamaters;
 
   constructor(
     parameters: BergBridgeParamaters,
@@ -66,6 +67,10 @@ class BergBridge {
 
   get isOnline(): boolean {
     return this.state.isOnline;
+  }
+
+  get devices(): BergDevice[] {
+    return this.state.devices;
   }
 
   async addDevice(device: BergDevice): Promise<void> {
