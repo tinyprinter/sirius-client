@@ -27,20 +27,55 @@ const bridge = new BergBridge(
   [printer1, printer2]
 );
 
-const daemon = async (): Promise<void> => {
-  try {
-    const tick = async (): Promise<void> => {
+class Daemon {
+  private timer: NodeJS.Timeout | undefined = undefined;
+  private isShuttingDown = false;
+
+  async run(): Promise<void> {
+    if (this.timer != null) {
+      return;
+    }
+
+    this.timer = setInterval(async () => await this.runServer(), 5000);
+    await this.runServer();
+  }
+
+  async shutdown(): Promise<void> {
+    if (this.timer != null) {
+      clearInterval(this.timer);
+    }
+
+    if (this.isShuttingDown) {
+      return;
+    }
+
+    this.isShuttingDown = true;
+
+    await bridge.stop();
+
+    // TODO: close bt/usb
+  }
+
+  private async runServer(): Promise<void> {
+    try {
       if (!bridge.isOnline) {
+        // TODO: open bt/usb
+
         console.log('starting bridge!');
         await bridge.start();
       }
-    };
-
-    setInterval(async () => await tick(), 5000);
-    await tick();
-  } catch (error) {
-    console.log(`error, daemon bailed`, error);
+    } catch (error) {
+      console.log(`error, daemon bailed`, error);
+    }
   }
-};
+}
+
+const daemon = new Daemon();
+
+process.on('SIGINT', async () => {
+  console.log('shutting down...');
+  await daemon.shutdown();
+  process.exit();
+});
 
 export default daemon;

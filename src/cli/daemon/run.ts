@@ -12,10 +12,12 @@ class Run extends CommandLineAction {
     });
   }
 
-  protected onDefineParameters(): void {}
+  protected onDefineParameters(): void {
+    // abstract parent, noop
+  }
 
   protected async onExecute(): Promise<void> {
-    await daemon();
+    await daemon.run();
   }
 }
 
