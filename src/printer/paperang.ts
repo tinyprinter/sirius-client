@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import * as paperang from './commander/paperang';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
-import { PrinterConfiguration } from '../config';
+import { PrinterConfiguration } from '../configuration';
 import { assertType, is } from 'typescript-is';
 
 export type PaperangParameters = {

@@ -1,9 +1,5 @@
 import { all } from '../printer';
-import {
-  isConfigurationValid,
-  PrinterConfiguration,
-  fromConfiguration,
-} from '.';
+import { PrinterConfiguration } from './index';
 import PrintableImageWrapper, {
   PrintableImageHandler,
 } from '../printer/printable-image-wrapper';
@@ -12,6 +8,8 @@ import BergPrinter from '../berger/device/printer';
 import { BergDeviceParameters } from '../berger/device';
 import BergBridge, { BergBridgeParamaters } from '../berger/bridge';
 import BergBridgeNetworkWS from '../berger/bridge/network/ws';
+import fromConfiguration from './from-configuration';
+import isConfigurationValid from './is-configuration-valid';
 
 type PrinterConfig = {
   driver: string;
@@ -30,7 +28,7 @@ type BridgeConfig = {
   devices: { [key: string]: DeviceConfig };
 };
 
-type Config = {
+export type Configuration = {
   printers: { [key: string]: PrinterConfig };
   network: NetworkConfig;
   bridge: BridgeConfig;
@@ -47,8 +45,8 @@ interface ConfigurablePrinterClassRef {
 
 // TODO: parse section-by-section, so errors are more localised
 // TODO: validate inputs, i.e. that addresses aren't empty strings, etc
-const parse = async (config: object): Promise<BergBridge> => {
-  if (!is<Config>(config)) {
+export default async (config: object): Promise<BergBridge> => {
+  if (!is<Configuration>(config)) {
     throw new Error('config malformed, bailing');
   }
 
@@ -124,5 +122,3 @@ const parse = async (config: object): Promise<BergBridge> => {
 
   return bridge;
 };
-
-export default parse;

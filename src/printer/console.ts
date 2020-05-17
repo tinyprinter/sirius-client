@@ -2,7 +2,7 @@ import termImg from 'term-img';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
-import { PrinterConfiguration } from '../config';
+import { PrinterConfiguration } from '../configuration';
 
 class Console implements PrintableImageHandler {
   static type = 'console';

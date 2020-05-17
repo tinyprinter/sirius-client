@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-script
 
-import parseYaml from '../src/config/parseYaml';
+import configuration from '../src/configuration';
 import { promises as fs } from 'fs';
 import Path from 'path';
 
@@ -14,9 +14,9 @@ if (filename == null || filename.includes(__filename)) {
 const run = async (): Promise<void> => {
   const path = await fs.realpath(Path.join(process.cwd(), filename));
 
-  const config = await parseYaml(path);
+  const bridge = await configuration(path);
 
-  // console.log({ config });
+  console.log({ bridge });
 };
 
 run();

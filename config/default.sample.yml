@@ -7,6 +7,16 @@ printers:
       image:
         width: 576
       transport:
+        type: usb
+        parameters:
+          vid: 0x20d1 # optional, but required if pid supplied
+          pid: 0x7008 # optional
+  printer_escpos:
+    driver: escpos
+    parameters:
+      image:
+        width: 384
+      transport:
         type: bluetooth
         parameters:
           address: 00-11-22-33-44-55

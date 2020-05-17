@@ -1,6 +1,6 @@
 import BergBridge from './berger/bridge';
 
-import parseYaml from './config/parseYaml';
+import configuration from './configuration';
 
 class Daemon {
   private timer: NodeJS.Timeout | undefined = undefined;
@@ -14,7 +14,7 @@ class Daemon {
       return;
     }
 
-    this.bridge = await parseYaml(configurationPath);
+    this.bridge = await configuration(configurationPath);
   }
 
   async run(): Promise<void> {
