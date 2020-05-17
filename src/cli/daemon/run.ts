@@ -25,7 +25,7 @@ class Run extends CommandLineAction {
       parameterShortName: '-c',
       argumentName: 'PATH',
       description: 'Path to configuration file.',
-      defaultValue: 'config/default.yml',
+      defaultValue: 'config/default.yaml',
     });
   }
 
