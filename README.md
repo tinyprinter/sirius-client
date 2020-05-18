@@ -79,3 +79,13 @@ cp ./node_modules/bluetooth-serial-port/build/Release/BluetoothSerialPort.node .
 `gm` lib needs imagemagick, so install it before getting too wild
 
 TODO: check for `gm`, output a warning if it's missing
+
+### faces/personality
+
+currently, only the "print" command is wired up to do anything, and it ignores faces
+
+it would be nice to be able to control:
+
+a) content of faces
+b) whether or not to print the face
+c) bonus: configure the spacing of faces per-printer, and whether or not to print them or not
