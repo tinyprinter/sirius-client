@@ -1,12 +1,14 @@
 import BergBridge from './berger/bridge';
 
-import configuration from './configuration';
+import makeConfiguration from './configuration';
+import { PrintableImageHandler } from './printer/printable-image-wrapper';
 
 class Daemon {
   private timer: NodeJS.Timeout | undefined = undefined;
   private isShuttingDown = false;
 
   private bridge: BergBridge | undefined;
+  private printers: { [key: string]: PrintableImageHandler } | undefined;
 
   async configure(configurationPath: string): Promise<void> {
     if (this.bridge != null) {
@@ -14,7 +16,20 @@ class Daemon {
       return;
     }
 
-    this.bridge = await configuration(configurationPath);
+    if (this.printers != null) {
+      const printers = this.printers;
+
+      await Promise.all(
+        Object.keys(this.printers).map(
+          async (key) => await printers[key].close()
+        )
+      );
+    }
+
+    const configuration = await makeConfiguration(configurationPath);
+
+    this.bridge = configuration.bridge;
+    this.printers = configuration.printers;
   }
 
   async run(): Promise<void> {
@@ -44,7 +59,15 @@ class Daemon {
 
     await this.bridge?.stop();
 
-    // TODO: close bt/usb
+    if (this.printers != null) {
+      const printers = this.printers;
+
+      await Promise.all(
+        Object.keys(this.printers).map(
+          async (key) => await printers[key].close()
+        )
+      );
+    }
   }
 
   private async runServer(): Promise<void> {
@@ -53,9 +76,22 @@ class Daemon {
       return;
     }
 
+    if (this.printers == null) {
+      console.log('no printers configured, bailing');
+      return;
+    }
+
     try {
       if (!this.bridge.isOnline) {
-        // TODO: open bt/usb
+        if (this.printers != null) {
+          const printers = this.printers;
+
+          await Promise.all(
+            Object.keys(this.printers).map(
+              async (key) => await printers[key].open()
+            )
+          );
+        }
 
         console.log('starting bridge!');
         console.log(`bridge address: ${this.bridge.parameters.address}`);

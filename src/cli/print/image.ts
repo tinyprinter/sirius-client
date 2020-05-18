@@ -5,17 +5,12 @@ import {
   CommandLineStringParameter,
 } from '@rushstack/ts-command-line';
 import PrintableImage from '../../printable-image';
-import { PrintableImageHandler } from '../../printer/printable-image-wrapper';
-// import ConsoleDriver from '../../printer-driver/console';
-
-// import process from '../../image-processor';
-
-// const readFile = promisify(fs.readFile);
-
-import printer from '../../default-printer';
+import { printer as makePrinter } from '../../configuration/index';
 
 export default class ImageAction extends CommandLineAction {
-  private _imagePath?: CommandLineStringParameter;
+  private _configPath!: CommandLineStringParameter;
+  private _imagePath!: CommandLineStringParameter;
+  private _printerName!: CommandLineStringParameter;
 
   public constructor() {
     super({
@@ -27,32 +22,54 @@ export default class ImageAction extends CommandLineAction {
   }
 
   protected async onExecute(): Promise<void> {
-    if (this._imagePath == null) {
-      throw new Error('_imagePath not defined on action');
-    }
-    if (this._imagePath.value == null) {
-      throw new Error('_imagePath has no value');
+    if (this._configPath.value == null) {
+      throw new Error('config path parameter has no value');
     }
 
-    const path = this._imagePath.value;
+    if (this._imagePath.value == null) {
+      throw new Error('file parameter has no value');
+    }
+
+    // find printer
+    const printer = await makePrinter(
+      this._configPath.value,
+      this._printerName.value
+    );
 
     // load file
-    const buffer = await fs.readFile(path);
-
+    const buffer = await fs.readFile(this._imagePath.value);
     const image = new PrintableImage(buffer);
     image.dither();
 
     // print 'em
-    await (printer as PrintableImageHandler).print(image, undefined);
+    await printer.open();
+    await printer.print(image, undefined);
+    await printer.close();
   }
 
   protected onDefineParameters(): void {
+    this._configPath = this.defineStringParameter({
+      parameterLongName: '--config-path',
+      parameterShortName: '-c',
+      argumentName: 'PATH',
+      description: 'Path to configuration file.',
+      defaultValue: 'config/default.yaml',
+    });
+
+    this._printerName = this.defineStringParameter({
+      parameterLongName: '--printer-name',
+      parameterShortName: '-p',
+      argumentName: 'NAME',
+      description:
+        'Name of printer key in config file. Will use the first printer if omitted.',
+    });
+
     this._imagePath = this.defineStringParameter({
       argumentName: 'FILE',
       description: 'Path to image file to be printed.',
-      defaultValue: '/path/to/image.bmp',
       parameterLongName: '--file',
       parameterShortName: '-f',
+      required: true,
     });
   }
 }

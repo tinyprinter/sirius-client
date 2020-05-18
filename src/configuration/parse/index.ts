@@ -4,7 +4,7 @@ import js from './js';
 import json from './json';
 import yaml from './yaml';
 
-export default async (path: string): Promise<object> => {
+const parse = async (path: string): Promise<object> => {
   const extension = Path.extname(path);
 
   switch (extension) {
@@ -20,3 +20,5 @@ export default async (path: string): Promise<object> => {
       throw new Error(`unknown configuration file type: ${extension}`);
   }
 };
+
+export default parse;

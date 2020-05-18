@@ -38,7 +38,6 @@
     "bluetooth-serial-port": "^2.2.7",
     "escpos": "^3.0.0-alpha.3",
     "escpos-bluetooth": "^3.0.0-alpha.2",
-    "escpos-usb": "^3.0.0-alpha.2",
     "fast-bmp": "^1.0.0",
     "get-pixels": "^3.3.2",
     "gm": "^1.23.1",
@@ -46,6 +45,7 @@
     "mutable-buffer": "^2.1.1",
     "term-img": "^4.1.0",
     "typescript-is": "^0.16.0",
+    "usb": "^1.6.3",
     "ws": "^7.1.2"
   },
   "resolutions": {

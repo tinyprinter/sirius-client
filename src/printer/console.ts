@@ -2,18 +2,16 @@ import termImg from 'term-img';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
-import { PrinterConfiguration } from '../configuration';
+import { PrinterParameters } from '../configuration';
 
 class Console implements PrintableImageHandler {
   static type = 'console';
 
-  static isConfigurationValid(configuration: PrinterConfiguration): boolean {
+  static areParametersValid(parameters: PrinterParameters): boolean {
     return true;
   }
 
-  static fromConfiguration(
-    configuration: PrinterConfiguration
-  ): PrintableImageHandler {
+  static fromParameters(parameters: PrinterParameters): PrintableImageHandler {
     return new this();
   }
 

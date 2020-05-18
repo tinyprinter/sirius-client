@@ -2,13 +2,11 @@ import {
   CommandLineAction,
   CommandLineStringParameter,
 } from '@rushstack/ts-command-line';
-import { promises as fs } from 'fs';
-import Path from 'path';
 
 import daemon from '../../daemon';
 
 class Run extends CommandLineAction {
-  private _path!: CommandLineStringParameter;
+  private _configPath!: CommandLineStringParameter;
 
   public constructor() {
     super({
@@ -20,7 +18,7 @@ class Run extends CommandLineAction {
   }
 
   protected onDefineParameters(): void {
-    this._path = this.defineStringParameter({
+    this._configPath = this.defineStringParameter({
       parameterLongName: '--config-path',
       parameterShortName: '-c',
       argumentName: 'PATH',
@@ -30,13 +28,11 @@ class Run extends CommandLineAction {
   }
 
   protected async onExecute(): Promise<void> {
-    if (this._path.value == null) {
+    if (this._configPath.value == null) {
       throw new Error('configuration path not set!');
     }
 
-    const path = await fs.realpath(Path.join(process.cwd(), this._path.value));
-
-    await daemon.configure(path);
+    await daemon.configure(this._configPath.value);
     await daemon.run();
   }
 }
