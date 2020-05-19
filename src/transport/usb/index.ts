@@ -1,12 +1,11 @@
-import USB, { Device, OutEndpoint, LIBUSB_CLASS_PRINTER } from 'usb';
+import USB, { Device, OutEndpoint } from 'usb';
 import { promisify } from 'util';
 
-import { TransportAdapter } from './index';
-import { assertType } from 'typescript-is';
+import { TransportAdapter } from '../index';
 
 export type USBParameters = {
-  pid?: number;
-  vid?: number;
+  pid: number;
+  vid: number;
 };
 
 export type USBTransportConfiguration = {
@@ -43,7 +42,7 @@ export default class implements TransportAdapter {
 
     this.device.open();
 
-    await Promise.all(
+    await Promise.allSettled(
       this.device.interfaces.map(async (iface) => {
         const setAltSetting = promisify(iface.setAltSetting).bind(iface);
         try {

@@ -1,3 +1,4 @@
+import Bluetooth, { BluetoothTransportConfiguration } from './bluetooth';
 import USB, { USBTransportConfiguration } from './usb';
 
 export interface TransportAdapter {
@@ -6,7 +7,9 @@ export interface TransportAdapter {
   write(bytes: Buffer): Promise<void>;
 }
 
-export type TransportConfiguration = USBTransportConfiguration;
+export type TransportConfiguration =
+  | BluetoothTransportConfiguration
+  | USBTransportConfiguration;
 
 const makeTransportAdapter = (
   configuration: TransportConfiguration
@@ -14,9 +17,9 @@ const makeTransportAdapter = (
   switch (configuration.type) {
     case 'usb':
       return new USB(configuration.parameters);
+    case 'bluetooth':
+      return new Bluetooth(configuration.parameters);
   }
-
-  throw new Error(`unknown transport type: ${configuration.type}`);
 };
 
 export { makeTransportAdapter };

@@ -89,16 +89,18 @@ export default class BluetoothPaperangPrinter implements PrintableImageHandler {
 
       await write(paperang.handshake());
       await write(paperang.noop());
-      await write(paperang.feed(0));
-      await write(paperang.noop());
 
       const segments = await paperang.imageSegments(await image.asPixels());
       for (let i = 0; i < segments.length; i++) {
         await write(segments[i]);
+        await write(paperang.noop());
 
         // add a pause here to allow printing to finish before the buffer flushes thru
         await new Promise((resolve) => setTimeout(resolve, 5));
       }
+
+      await write(paperang.feed(4000));
+      await write(paperang.noop());
 
       await new Promise((resolve) => setTimeout(resolve, 500));
 

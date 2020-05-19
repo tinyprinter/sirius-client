@@ -50,13 +50,20 @@ export default class PaperangPrinter implements PrintableImageHandler {
     try {
       await this.transport.write(paperang.handshake());
       await this.transport.write(paperang.noop());
-      await this.transport.write(paperang.feed(0));
-      await this.transport.write(paperang.noop());
 
       const segments = await paperang.imageSegments(await image.asPixels());
       for (let i = 0; i < segments.length; i++) {
         await this.transport.write(segments[i]);
+
+        // add a pause here to allow printing to finish before the buffer flushes thru
+        await new Promise((resolve) => setTimeout(resolve, 5));
       }
+
+      await this.transport.write(paperang.feed(75));
+      await this.transport.write(paperang.noop());
+
+      // let printing finish, just in case
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (error) {
       console.log('uh oh', error);
       return false;

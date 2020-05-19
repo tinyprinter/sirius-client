@@ -19,7 +19,7 @@ class Daemon {
     if (this.printers != null) {
       const printers = this.printers;
 
-      await Promise.all(
+      await Promise.allSettled(
         Object.keys(this.printers).map(
           async (key) => await printers[key].close()
         )
@@ -62,7 +62,7 @@ class Daemon {
     if (this.printers != null) {
       const printers = this.printers;
 
-      await Promise.all(
+      await Promise.allSettled(
         Object.keys(this.printers).map(
           async (key) => await printers[key].close()
         )
@@ -86,7 +86,7 @@ class Daemon {
         if (this.printers != null) {
           const printers = this.printers;
 
-          await Promise.all(
+          await Promise.allSettled(
             Object.keys(this.printers).map(
               async (key) => await printers[key].open()
             )
