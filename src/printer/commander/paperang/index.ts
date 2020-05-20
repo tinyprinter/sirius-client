@@ -102,10 +102,9 @@ const imagePixels = async (pixels: ndarray<number>): Promise<Buffer[]> => {
   return segments.map((s) => packeting(s, Command.PrintData)[0]);
 };
 
-// TODO: can we pack more rows into a single packet? sending per-row might not be necessary
 const image = async (buffer: Buffer, width: number): Promise<Buffer[]> => {
   const message = buffer;
-  return packeting(message, Command.PrintData, width * 2);
+  return packeting(message, Command.PrintData, width);
 };
 
 export {

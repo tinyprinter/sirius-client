@@ -68,12 +68,5 @@ export default class implements TransportAdapter {
 
   async write(buffer: Buffer): Promise<void> {
     await this.connection?.write(buffer);
-
-    // XXX: add a pause here to allow printing to finish before the buffer flushes thru, and process exits/whatever
-    // TODO: this feels unnecessary, investigate why it's failing (on macOS only?) occasionally
-    // the delay is based on the length of the command sent, but that's pretty hand-wavy
-    await new Promise((resolve) =>
-      setTimeout(resolve, Math.floor(buffer.length / 5))
-    );
   }
 }

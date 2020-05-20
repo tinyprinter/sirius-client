@@ -44,6 +44,10 @@ export default class ImageAction extends CommandLineAction {
     // print 'em
     await printer.open();
     await printer.print(image, undefined);
+
+    // let commands finish executing (printing is slow!)
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
     await printer.close();
   }
 
