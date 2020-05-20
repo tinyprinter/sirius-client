@@ -1,4 +1,4 @@
-import * as paperang from './commander/paperang';
+import * as paperang from './commander/paperang/index';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
 import { PrinterParameters } from '../configuration';
@@ -8,6 +8,7 @@ import {
   TransportConfiguration,
   makeTransportAdapter,
 } from '../transport';
+import { MutableBuffer } from 'mutable-buffer';
 
 export type PaperangParameters = {
   image: {
@@ -48,21 +49,22 @@ export default class PaperangPrinter implements PrintableImageHandler {
     image.resize(this.parameters.image.width);
 
     try {
-      await this.transport.write(paperang.handshake());
-      await this.transport.write(paperang.noop());
-
-      const segments = await paperang.imageSegments(await image.asPixels());
-      for (let i = 0; i < segments.length; i++) {
-        await this.transport.write(segments[i]);
-      }
-
-      await this.transport.write(paperang.feed(75));
-      await this.transport.write(paperang.noop());
+      await this.write(await paperang.handshake());
+      await this.write(
+        await paperang.image(await image.asBIN(), this.parameters.image.width)
+      );
+      await this.write(await paperang.lineFeed(75));
     } catch (error) {
       console.log('uh oh', error);
       return false;
     }
 
     return true;
+  }
+
+  private async write(buffers: Buffer[]): Promise<void> {
+    for (const buffer of buffers) {
+      await this.transport.write(buffer);
+    }
   }
 }

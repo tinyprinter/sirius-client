@@ -20,7 +20,7 @@ class PrintableImage {
       return this.gmState;
     }
 
-    const gmState = im(this.bitmap).colors(2).define('png:bit-depth=1');
+    const gmState = im(this.bitmap);
 
     this.gmState = gmState;
 
@@ -34,19 +34,21 @@ class PrintableImage {
   }
 
   async asBMP(): Promise<Buffer> {
-    // TODO: we'd need to return gmState as bmp if it's been touched. so. only return source safely
+    const gm = this.gm().colors(2).define('png:bit-depth=1').monochrome();
 
-    if (this.gmState != null) {
-      throw new Error(
-        `image has been manipulated, and can't be returned as a bitmap`
-      );
-    }
+    return new Promise((resolve, reject) => {
+      gm.toBuffer('BMP', (err, out) => {
+        if (err) {
+          return reject(err);
+        }
 
-    return this.bitmap;
+        return resolve(out);
+      });
+    });
   }
 
   async asPNG(): Promise<Buffer> {
-    const gm = await this.gm();
+    const gm = this.gm().colors(2).define('png:bit-depth=1').monochrome();
 
     return new Promise((resolve, reject) => {
       gm.toBuffer('PNG', (err, out) => {
@@ -59,9 +61,27 @@ class PrintableImage {
     });
   }
 
+  async asBIN(): Promise<Buffer> {
+    const gm = this.gm()
+      .colors(2) // automatically applies dithering
+      .out('-depth', '1')
+      .negative();
+
+    return new Promise((resolve, reject) => {
+      gm.toBuffer('GRAY', (err, out) => {
+        if (err) {
+          return reject(err);
+        }
+
+        return resolve(out);
+      });
+    });
+  }
+
   async asPixels(): Promise<ndarray> {
     return new Promise(async (resolve, reject) => {
       const png = await this.asPNG();
+
       getPixels(png, 'image/png', (err, pixels) => {
         if (err) {
           return reject(err);
