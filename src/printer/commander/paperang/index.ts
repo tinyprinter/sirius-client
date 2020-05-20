@@ -6,6 +6,11 @@ import Command from './command';
 import CRC from './crc';
 import segmenter from './segmenter';
 
+export enum PaperType {
+  Receipt = 0,
+  Label = 1,
+}
+
 enum Packet {
   Start = 0x02,
   End = 0x03,
@@ -15,7 +20,7 @@ const MagicValue = 0x35769521;
 
 const sharedCRC = new CRC(0x6968634 ^ 0x2e696d);
 
-const MAX_SLICE_LENGTH = 1024;
+const MAX_SLICE_LENGTH = 1152;
 
 const slice = (input: Buffer, width: number): Buffer[] => {
   const output: Buffer[] = [];
@@ -73,6 +78,24 @@ const selfTest = async (): Promise<Buffer[]> => {
   return packeting(message, Command.PrintTestPage);
 };
 
+const setPaperType = async (paperType: PaperType): Promise<Buffer[]> => {
+  const message = struct.pack('<B', paperType);
+
+  return packeting(message, Command.SetPaperType);
+};
+
+const setPowerOffTime = async (time: number): Promise<Buffer[]> => {
+  const message = struct.pack('<H', time);
+
+  return packeting(message, Command.SetPowerDownTime);
+};
+
+const setPrintDensity = async (density: number): Promise<Buffer[]> => {
+  const message = struct.pack('<B', density);
+
+  return packeting(message, Command.SetHeatDensity);
+};
+
 const imagePixels = async (pixels: ndarray<number>): Promise<Buffer[]> => {
   const segments = await segmenter(pixels);
 
@@ -82,7 +105,16 @@ const imagePixels = async (pixels: ndarray<number>): Promise<Buffer[]> => {
 // TODO: can we pack more rows into a single packet? sending per-row might not be necessary
 const image = async (buffer: Buffer, width: number): Promise<Buffer[]> => {
   const message = buffer;
-  return packeting(message, Command.PrintData, width);
+  return packeting(message, Command.PrintData, width * 2);
 };
 
-export { handshake, lineFeed, selfTest, image, imagePixels };
+export {
+  handshake,
+  lineFeed,
+  selfTest,
+  image,
+  imagePixels,
+  setPaperType,
+  setPowerOffTime,
+  setPrintDensity,
+};

@@ -8,7 +8,6 @@ import {
   TransportConfiguration,
   makeTransportAdapter,
 } from '../transport';
-import { MutableBuffer } from 'mutable-buffer';
 
 export type PaperangParameters = {
   image: {
@@ -39,6 +38,9 @@ export default class PaperangPrinter implements PrintableImageHandler {
 
   async open(): Promise<void> {
     await this.transport.connect();
+
+    await this.write(await paperang.handshake());
+    await this.write(await paperang.setPowerOffTime(0));
   }
 
   async close(): Promise<void> {
@@ -49,7 +51,6 @@ export default class PaperangPrinter implements PrintableImageHandler {
     image.resize(this.parameters.image.width);
 
     try {
-      await this.write(await paperang.handshake());
       await this.write(
         await paperang.image(await image.asBIN(), this.parameters.image.width)
       );
