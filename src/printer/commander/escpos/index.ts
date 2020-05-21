@@ -1,6 +1,7 @@
 import struct from 'python-struct';
 
 const ESC = '\x1b';
+const GS = `\x1d`;
 
 const EOL = '\x0a';
 
@@ -37,7 +38,7 @@ const slice = (input: Buffer, width: number): Buffer[] => {
 const handshake = async (): Promise<Buffer[]> => {
   return [
     Buffer.from(`${ESC}\x40`, 'ascii'),
-    Buffer.from(`\x1d\x49\x01`, 'ascii'), // ask for printer model, maybe this resets the buffers? :(
+    Buffer.from(`${GS}\x49\x01`, 'ascii'), // ask for printer model, maybe this resets the buffers? :(
     Buffer.from(`${ESC}\x74\x00`, 'ascii'), // set code page to default, since we're only printing images anyway
   ];
 };
@@ -81,7 +82,7 @@ const raster = async (
     const h = (blob.length / width) * 8;
 
     const header = Buffer.concat([
-      Buffer.from('\x1d\x76\x30', 'ascii'),
+      Buffer.from(`${GS}\x76\x30`, 'ascii'),
       struct.pack('<B', rasterMode),
       struct.pack('<H', w),
       struct.pack('<H', h),
