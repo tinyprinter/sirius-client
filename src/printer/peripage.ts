@@ -39,11 +39,7 @@ export default class PeripagePrinter implements PrintableImageHandler {
   async open(): Promise<void> {
     await this.transport.connect();
 
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // console.log('lets ago');
     await this.write(await peripage.handshake());
-    // await this.write(await peripage.setPowerOffTime(0));
   }
 
   async close(): Promise<void> {
@@ -54,22 +50,9 @@ export default class PeripagePrinter implements PrintableImageHandler {
     image.resize(this.parameters.image.width);
 
     try {
-      // await this.write(
-      //   await peripage.pageSetup(this.parameters.image.width, 200) // TODO: what's the image height? let's use that
-      // );
-
       const bits = await image.asBIN();
 
-      console.log(bits.length, this.parameters.image.width);
-
-      await this.write(await peripage.setThickness(peripage.Thickness.Medium));
       await this.write(await peripage.image(bits, this.parameters.image.width));
-
-      // await this.write(await peripage.drawBox(1, 0, 0, 20, 20));
-      // await this.write(
-      //   await peripage.image(await image.asBIN(), this.parameters.image.width)
-      // );
-      // await this.write(await peripage.lineFeed(75));
     } catch (error) {
       console.log('uh oh', error);
       return false;
@@ -80,7 +63,6 @@ export default class PeripagePrinter implements PrintableImageHandler {
 
   private async write(buffers: Buffer[]): Promise<void> {
     for (const buffer of buffers) {
-      console.log(buffer.length, buffer.toString('hex'));
       await this.transport.write(buffer);
     }
   }
