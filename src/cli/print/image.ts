@@ -46,7 +46,9 @@ export default class ImageAction extends CommandLineAction {
     await printer.print(image, undefined);
 
     // let commands finish executing (printing is slow!)
+    console.log('commands sent, allowing a moment to finish up...');
     await new Promise((resolve) => setTimeout(resolve, 5000));
+    console.log('...done!');
 
     await printer.close();
   }

@@ -36,7 +36,11 @@ export default class implements TransportAdapter {
 
     if (this.device == null) {
       throw new Error(
-        `could not find USB device with pid ${this.parameters.pid}/${this.parameters.vid}`
+        `could not find USB device with vid/pid ${this.parameters.vid}/${
+          this.parameters.pid
+        } (0x${this.parameters.vid.toString(
+          16
+        )}/0x${this.parameters.pid.toString(16)})`
       );
     }
 

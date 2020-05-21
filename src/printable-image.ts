@@ -1,8 +1,6 @@
-import ndarray from 'ndarray';
 import gm, { State as GmState } from 'gm';
 
 import bitmapify from './bitmapify';
-import getPixels from 'get-pixels';
 
 const im = gm.subClass({ imageMagick: true });
 
@@ -74,19 +72,6 @@ class PrintableImage {
         }
 
         return resolve(out);
-      });
-    });
-  }
-
-  async asPixels(): Promise<ndarray> {
-    return new Promise(async (resolve, reject) => {
-      const png = await this.asPNG();
-
-      getPixels(png, 'image/png', (err, pixels) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(pixels);
       });
     });
   }

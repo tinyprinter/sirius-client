@@ -60,7 +60,9 @@ export default class PayloadAction extends CommandLineAction {
     await printer.print(image, printerPayload);
 
     // let commands finish executing (printing is slow!)
+    console.log('commands sent, allowing a moment to finish up...');
     await new Promise((resolve) => setTimeout(resolve, 5000));
+    console.log('...done!');
 
     await printer.close();
   }

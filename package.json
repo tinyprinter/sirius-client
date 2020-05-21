@@ -43,7 +43,6 @@
     "copyfiles": "^2.2.0",
     "escpos": "^3.0.0-alpha.3",
     "fast-bmp": "^1.0.0",
-    "get-pixels": "^3.3.2",
     "gm": "^1.23.1",
     "js-yaml": "^3.13.1",
     "mutable-buffer": "^2.1.1",

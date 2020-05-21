@@ -1,4 +1,4 @@
-import struct from 'python-struct';
+import * as escpos from '../escpos';
 
 const handshake = async (): Promise<Buffer[]> => {
   return [
@@ -7,22 +7,6 @@ const handshake = async (): Promise<Buffer[]> => {
   ];
 };
 
-const image = async (bits: Buffer, width: number): Promise<Buffer[]> => {
-  const w = width / 8;
-  const h = (bits.length / width) * 8;
+export { handshake };
 
-  const header = Buffer.concat([
-    Buffer.from(`\x0a\x0a`), // TODO: could probably move this out, when we're running other commands
-    Buffer.from('\x1d\x76\x30\x00', 'ascii'),
-    struct.pack('<H', w),
-    struct.pack('<H', h),
-  ]);
-
-  return [header, bits];
-};
-
-const feed = async (lines: number): Promise<Buffer[]> => {
-  return Array(lines).fill(Buffer.from('\n', 'ascii'));
-};
-
-export { image, feed, handshake };
+export { feed, raster as image } from '../escpos';
