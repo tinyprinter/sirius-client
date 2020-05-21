@@ -21,4 +21,8 @@ const image = async (bits: Buffer, width: number): Promise<Buffer[]> => {
   return [header, bits];
 };
 
-export { image, handshake };
+const feed = async (lines: number): Promise<Buffer[]> => {
+  return Array(lines).fill(Buffer.from('\n', 'ascii'));
+};
+
+export { image, feed, handshake };
