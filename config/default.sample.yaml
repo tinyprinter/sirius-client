@@ -1,4 +1,6 @@
 ---
+version: 1
+
 printers:
   printer_console:
     driver: console
