@@ -103,8 +103,8 @@ const imagePixels = async (pixels: ndarray<number>): Promise<Buffer[]> => {
 };
 
 const image = async (buffer: Buffer, width: number): Promise<Buffer[]> => {
-  const message = buffer;
-  return packeting(message, Command.PrintData, width);
+  // TODO: this is stupid, but here we are. fix this some day, yeah?
+  return [Buffer.concat(packeting(buffer, Command.PrintData, width))];
 };
 
 export {

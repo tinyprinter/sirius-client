@@ -1038,10 +1038,9 @@ bl@^4.0.1:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-bluetooth-serial-port@^2.2.7:
+"bluetooth-serial-port@https://github.com/notjosh/node-bluetooth-serial-port.git#76dc7c5fc41b2dcfa66004f28aea994e84c7341e":
   version "2.2.7"
-  resolved "https://registry.yarnpkg.com/bluetooth-serial-port/-/bluetooth-serial-port-2.2.7.tgz#6a0b09a2bac760e3a4b82e795ae1b1f0d4cda82e"
-  integrity sha512-R/ozYD6bUPBaYstowIwPPezZph2zW84Icryh02vVJYQxWuAcigxSoZRljbvp4IEGMWwjREArLQCKxT6B/ME60A==
+  resolved "https://github.com/notjosh/node-bluetooth-serial-port.git#76dc7c5fc41b2dcfa66004f28aea994e84c7341e"
   dependencies:
     bindings "1.2.x"
     nan latest
