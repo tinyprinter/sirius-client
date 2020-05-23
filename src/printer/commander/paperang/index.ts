@@ -20,7 +20,8 @@ const MagicValue = 0x35769521;
 
 const sharedCRC = new CRC(0x6968634 ^ 0x2e696d);
 
-const MAX_SLICE_LENGTH = 1152;
+// I've had problems printing > 64k in a single command to a P2S via bluetooth, ymmv
+const MAX_PACKET_LENGTH = 65_536;
 
 const slice = (input: Buffer, width: number): Buffer[] => {
   const output: Buffer[] = [];
@@ -39,15 +40,22 @@ const slice = (input: Buffer, width: number): Buffer[] => {
 };
 
 const packeting = (
-  bytes: Buffer,
+  slices: Buffer[] | Buffer,
   command: Command,
-  width: number = MAX_SLICE_LENGTH,
   crc: CRC = sharedCRC
 ): Buffer[] => {
-  const slices = slice(bytes, width);
+  slices = Array.isArray(slices) ? slices : [slices];
 
-  return slices.map((slice, i) => {
-    const buffer = new MutableBuffer(slice.length + 128, 128);
+  const packets: Buffer[] = [];
+  const current = new MutableBuffer(
+    slices.length > 1 ? MAX_PACKET_LENGTH : slices[0].length,
+    128
+  );
+
+  for (let i = 0; i < slices.length; i++) {
+    const slice = slices[i];
+
+    const buffer = new MutableBuffer(slice.length + 8, 128);
 
     buffer.write(struct.pack('<BBB', Packet.Start, command, i));
     buffer.write(struct.pack('<H', slice.length));
@@ -55,15 +63,27 @@ const packeting = (
     buffer.write(struct.pack('<I', crc.checksum(slice)));
     buffer.write(struct.pack('<B', Packet.End));
 
-    return buffer.flush();
-  });
+    if (current.size + slice.length > MAX_PACKET_LENGTH) {
+      packets.push(Buffer.from(current.flush()));
+      current.clear();
+    }
+
+    current.write(buffer.flush());
+
+    // if it's the last, just append it
+    if (i === slices.length - 1) {
+      packets.push(Buffer.from(current.flush()));
+    }
+  }
+
+  return packets;
 };
 
 const handshake = async (): Promise<Buffer[]> => {
   const key = 0x6968634 ^ 0x2e696d;
   const message = struct.pack('<I', key ^ MagicValue);
 
-  return packeting(message, Command.SetCrcKey, undefined, new CRC(MagicValue));
+  return packeting(message, Command.SetCrcKey, new CRC(MagicValue));
 };
 
 const lineFeed = async (ms: number): Promise<Buffer[]> => {
@@ -103,8 +123,7 @@ const imagePixels = async (pixels: ndarray<number>): Promise<Buffer[]> => {
 };
 
 const image = async (buffer: Buffer, width: number): Promise<Buffer[]> => {
-  // TODO: this is stupid, but here we are. fix this some day, yeah?
-  return [Buffer.concat(packeting(buffer, Command.PrintData, width))];
+  return packeting(slice(buffer, width), Command.PrintData);
 };
 
 export {

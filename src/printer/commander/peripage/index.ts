@@ -1,5 +1,3 @@
-import * as escpos from '../escpos';
-
 const handshake = async (): Promise<Buffer[]> => {
   return [
     // 16, -1, -2, 1, 27, 64, 0

@@ -68,11 +68,19 @@ export default class implements TransportAdapter {
   }
 
   async disconnect(): Promise<void> {
+    logger.info('...disconnecting bt (%s)', this.parameters.address);
+
     await this.connection?.close();
     this.connection = undefined;
   }
 
   async write(buffer: Buffer): Promise<void> {
+    logger.debug(
+      '...writing bt (%s), %d bytes',
+      this.parameters.address,
+      buffer.length
+    );
+
     await this.connection?.write(buffer);
   }
 }
