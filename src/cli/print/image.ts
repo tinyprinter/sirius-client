@@ -7,6 +7,8 @@ import {
 import PrintableImage from '../../printable-image';
 import { printer as makePrinter } from '../../configuration/index';
 
+import logger from '../../logger';
+
 export default class ImageAction extends CommandLineAction {
   private _configPath!: CommandLineStringParameter;
   private _imagePath!: CommandLineStringParameter;
@@ -46,9 +48,9 @@ export default class ImageAction extends CommandLineAction {
     await printer.print(image, undefined);
 
     // let commands finish executing (printing is slow!)
-    console.log('commands sent, allowing a moment to finish up...');
+    logger.info('commands sent, allowing a moment to finish up...');
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    console.log('...done!');
+    logger.info('...done!');
 
     await printer.close();
   }

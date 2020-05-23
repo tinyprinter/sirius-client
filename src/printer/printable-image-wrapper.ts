@@ -20,13 +20,17 @@ class PrintableImageWrapper implements BergPrinterHandler {
   }
 
   async print(payload: BergPrinterPayload): Promise<boolean> {
-    const bits = await unrle(payload.rle.data);
+    const bits = await (async (): Promise<Buffer> => {
+      if (payload.rle.isCompressed) {
+        return await unrle(payload.rle.data);
+      } else {
+        return Buffer.from(payload.rle.data);
+      }
+    })();
 
     const image = PrintableImage.fromBits(bits);
 
-    const success = await this.handler.print(image, payload);
-
-    return success;
+    return await this.handler.print(image, payload);
   }
 }
 

@@ -12,6 +12,7 @@ import unrle from '../../berger/device/printer/unrle';
 import devicePayloadDecoder from '../../berger/device/payload-decoder';
 import printerPayloadDecoder from '../../berger/device/printer/payload-decoder';
 import { printer as makePrinter } from '../../configuration/index';
+import logger from '../../logger';
 
 export default class PayloadAction extends CommandLineAction {
   private _configPath!: CommandLineStringParameter;
@@ -60,9 +61,9 @@ export default class PayloadAction extends CommandLineAction {
     await printer.print(image, printerPayload);
 
     // let commands finish executing (printing is slow!)
-    console.log('commands sent, allowing a moment to finish up...');
+    logger.info('commands sent, allowing a moment to finish up...');
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    console.log('...done!');
+    logger.info('...done!');
 
     await printer.close();
   }

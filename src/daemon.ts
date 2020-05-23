@@ -2,6 +2,7 @@ import BergBridge from './berger/bridge';
 
 import makeConfiguration from './configuration';
 import { PrintableImageHandler } from './printer/printable-image-wrapper';
+import logger from './logger';
 
 class Daemon {
   private timer: NodeJS.Timeout | undefined = undefined;
@@ -12,7 +13,7 @@ class Daemon {
 
   async configure(configurationPath: string): Promise<void> {
     if (this.bridge != null) {
-      console.log("reconfiguring isn't supported (yet!), ignoring request");
+      logger.warn("reconfiguring isn't supported (yet!), ignoring request");
       return;
     }
 
@@ -34,7 +35,7 @@ class Daemon {
 
   async run(): Promise<void> {
     if (this.bridge == null) {
-      console.log('no bridge configured, bailing');
+      logger.warn('no bridge configured, bailing');
       return;
     }
 
@@ -72,18 +73,19 @@ class Daemon {
 
   private async runServer(): Promise<void> {
     if (this.bridge == null) {
-      console.log('no bridge configured, bailing');
+      logger.warn('no bridge configured, bailing');
       return;
     }
 
     if (this.printers == null) {
-      console.log('no printers configured, bailing');
+      logger.warn('no printers configured, bailing');
       return;
     }
 
     try {
       if (!this.bridge.isOnline) {
         if (this.printers != null) {
+          // TODO: filter by only printers actively used by devices, not just present in config
           const printers = this.printers;
 
           await Promise.allSettled(
@@ -93,18 +95,20 @@ class Daemon {
           );
         }
 
-        console.log('starting bridge!');
-        console.log(`bridge address: ${this.bridge.parameters.address}`);
+        logger.info('starting bridge!');
+        logger.verbose('bridge address: %s', this.bridge.parameters.address);
         for (let i = 0; i < this.bridge.devices.length; i++) {
           const device = this.bridge.devices[i];
-          console.log(
-            ` - device #${i + 1} address: ${device.parameters.address}`
+          logger.verbose(
+            ` - device #%d address: %s`,
+            i + 1,
+            device.parameters.address
           );
         }
         await this.bridge.start();
       }
     } catch (error) {
-      console.log(`error, daemon bailed`, error);
+      logger.error(`error, daemon bailed: %O`, error);
     }
   }
 }
@@ -112,7 +116,7 @@ class Daemon {
 const daemon = new Daemon();
 
 process.on('SIGINT', async () => {
-  console.log('shutting down...');
+  logger.info('shutting down...');
   await daemon.shutdown();
   process.exit();
 });

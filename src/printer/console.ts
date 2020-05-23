@@ -3,6 +3,7 @@ import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
 import { PrinterParameters } from '../configuration';
+import logger from '../logger';
 
 class Console implements PrintableImageHandler {
   static type = 'console';
@@ -23,7 +24,7 @@ class Console implements PrintableImageHandler {
     payload: BergPrinterPayload
   ): Promise<boolean> {
     return new Promise(async (resolve) => {
-      console.log('printing image: ', payload);
+      logger.debug('printing image: %O', payload);
 
       // if we've come from a payload, it must be upside down
       if (payload != null) {

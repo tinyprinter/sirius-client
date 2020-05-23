@@ -9,6 +9,7 @@ import BergBridgeCommand, {
 import BergDeviceCommand, {
   BergDeviceCommandJSON,
 } from '../commands/device-command';
+import logger from '../../logger';
 
 export type BergBridgeParamaters = {
   address: string;
@@ -119,13 +120,15 @@ class BergBridge {
     command: BergBridgeCommand
   ): Promise<BergBridgeCommandResponseJSON | null> {
     if (command.bridgeAddress !== this.parameters.address) {
-      console.log(
-        `warn: bridge address does not match: sent (${command.bridgeAddress}) !== us (${this.parameters.address})`
+      logger.warn(
+        'bridge address does not match: sent (%s) !== us (%s)',
+        command.bridgeAddress,
+        this.parameters.address
       );
       return null;
     }
 
-    console.log(`debug: bridge command: ${command.commandName}`);
+    logger.debug('bridge command: %s', command.commandName);
 
     switch (command.commandName) {
       case BergBridgeCommandName.AddDeviceEncryptionKey: {
@@ -137,14 +140,15 @@ class BergBridge {
           const device = this.deviceAt(params.device_address);
 
           if (device != null) {
-            console.log(
-              `debug: saving encryption key for device #${params.device_address}`
+            logger.debug(
+              'saving encryption key for device %s',
+              params.device_address
             );
             device.state.encryptionKey = params.encryption_key;
           }
         } catch (error) {
-          console.error(
-            `error processing BergBridgeCommandName.AddDeviceEncryptionKey`,
+          logger.error(
+            `error processing BergBridgeCommandName.AddDeviceEncryptionKey: %O`,
             error
           );
         }
@@ -152,9 +156,7 @@ class BergBridge {
         break;
       }
       default:
-        console.error(
-          `warn: unknown bridge command of name: ${command.commandName}`
-        );
+        logger.warn('unknown bridge command of name: %s', command.commandName);
     }
 
     return null;
@@ -220,14 +222,12 @@ class BergBridge {
           break;
 
         default:
-          console.error(`Unknown command type: ${message.type}`, { message });
+          logger.warn('Unknown command type: %s: %O', message.type, message);
           break;
       }
     } catch (error) {
-      // TODO: what do we send back in case of an error?
-      // the LP bridge silently ignores these, which I think is okay for us here
-      // network.send({ error: 'invalid message' });
-      console.error(`Error processing command`, error);
+      // no message needs to be sent if there's an error, so we'll just log it
+      logger.error(`Error processing command: %O`, error);
     }
   };
 }

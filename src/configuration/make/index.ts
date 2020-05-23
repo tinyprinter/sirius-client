@@ -1,11 +1,14 @@
-import PrintableImageWrapper from '../../printer/printable-image-wrapper';
+import PrintableImageWrapper, {
+  PrintableImageHandler,
+} from '../../printer/printable-image-wrapper';
 import { is } from 'typescript-is';
-import BergPrinter from '../../berger/device/printer';
+import BergPrinter, { BergPrinterHandler } from '../../berger/device/printer';
 import { BergDeviceParameters } from '../../berger/device';
 import BergBridge, { BergBridgeParamaters } from '../../berger/bridge';
 import BergBridgeNetworkWS from '../../berger/bridge/network/ws';
 import makePrinters, { PrinterConfiguration } from './printers';
 import { Configuration } from '../index';
+import logger from '../../logger';
 
 type DeviceConfig = {
   type: string;
@@ -36,14 +39,18 @@ export default async (config: object): Promise<Configuration> => {
   // set up actual printers
   const printers = await makePrinters(config.printers);
 
+  const printersInUse: typeof printers = {};
+
   // set up virtual devices
   const devices = [];
   for (const name in config.bridge.devices) {
     const deviceConfig = config.bridge.devices[name];
 
     if (deviceConfig.type !== 'littleprinter') {
-      console.log(
-        `only supported device is littleprinter, ${name} is ${deviceConfig.type}`
+      logger.error(
+        'only supported device is littleprinter, %s is %s',
+        name,
+        deviceConfig.type
       );
       continue;
     }
@@ -51,12 +58,12 @@ export default async (config: object): Promise<Configuration> => {
     const handler = printers[deviceConfig.handler];
 
     if (handler == null) {
-      console.log(
-        `can't find handler named "${
-          deviceConfig.handler
-        }" (valid handlers are: ${Object.keys(printers)
+      logger.error(
+        'can\'t find handler named "%s" (valid handlers are: %s)',
+        deviceConfig.handler,
+        Object.keys(printers)
           .map((s) => `"${s}"`)
-          .join(', ')})`
+          .join(', ')
       );
       continue;
     }
@@ -70,6 +77,7 @@ export default async (config: object): Promise<Configuration> => {
       new PrintableImageWrapper(handler)
     );
 
+    printersInUse[deviceConfig.handler] = handler;
     devices.push(littleprinter);
   }
 
@@ -83,6 +91,6 @@ export default async (config: object): Promise<Configuration> => {
 
   return {
     bridge: new BergBridge(parameters, network, devices),
-    printers,
+    printers: printersInUse,
   };
 };

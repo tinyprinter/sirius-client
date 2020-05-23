@@ -5,6 +5,7 @@ import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
 import { PrinterParameters } from '../configuration';
 import { is, assertType } from 'typescript-is';
+import logger from '../logger';
 
 enum Format {
   BIN = 'bin',
@@ -65,13 +66,13 @@ export default class implements PrintableImageHandler {
 
       const path = Path.join(this.parameters.directory, filename);
 
-      console.log(`writing to: ${path}`);
+      logger.debug(`writing to: %s`, path);
 
       await fs.writeFile(path, buffer);
 
       return true;
     } catch (error) {
-      console.log(`FileWriter error: ${error}`);
+      logger.error('FileWriter error: %O', error);
       return false;
     }
   }

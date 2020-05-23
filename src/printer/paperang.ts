@@ -8,6 +8,7 @@ import {
   TransportConfiguration,
   makeTransportAdapter,
 } from '../transport';
+import logger from '../logger';
 
 export type PaperangParameters = {
   image: {
@@ -56,7 +57,7 @@ export default class PaperangPrinter implements PrintableImageHandler {
       );
       await this.write(await paperang.lineFeed(75));
     } catch (error) {
-      console.log('uh oh', error);
+      logger.error('uh oh: %O', error);
       return false;
     }
 

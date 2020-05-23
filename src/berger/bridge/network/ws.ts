@@ -4,6 +4,7 @@ import {
   BergBridgeNetworkMessage,
   BergBridgeNetworkDelegate,
 } from './index';
+import logger from '../../../logger';
 
 class BergBridgeNetworkWS implements BergBridgeNetwork {
   uri: string;
@@ -23,13 +24,13 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
     const ws = new WebSocket(this.uri);
 
     ws.addEventListener('open', async () => {
-      console.log('ws:open');
+      logger.debug('ws:open');
 
       await this.delegate?.onConnect(this);
     });
 
     ws.addEventListener('close', async (event) => {
-      console.log('ws:close', `${event.code} ${event.reason}`);
+      logger.debug('ws:close: %d %s', event.code, event.reason);
 
       await this.delegate?.onDisconnect(this);
 
@@ -37,7 +38,7 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
     });
 
     ws.addEventListener('message', async (event) => {
-      console.log('ws:message', typeof event.data);
+      logger.debug('ws:message: %s', typeof event.data);
 
       try {
         const stringIn =
@@ -50,13 +51,13 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
           await this.send(response);
         }
       } catch (error) {
-        console.log('ws:oh no:', error);
+        logger.debug('ws:oh no: %O', error);
         throw error;
       }
     });
 
     ws.addEventListener('error', (error) => {
-      console.log('ws:error', { error });
+      logger.debug('ws:error: %O', error);
     });
 
     // I guess these aren't available in the browser?
@@ -64,19 +65,19 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
     // So, only run these when available.
     if (ws.addListener) {
       ws.addListener('ping', () => {
-        console.log('ws:ping');
+        logger.debug('ws:ping');
       });
 
       ws.addListener('pong', () => {
-        console.log('ws:pong');
+        logger.debug('ws:pong');
       });
 
       ws.addListener('unexpected-response', (param) => {
-        console.log('ws:unexpected-response', { param });
+        logger.debug('ws:unexpected-response: %O', param);
       });
 
       ws.addListener('upgrade', () => {
-        console.log('ws:upgrade');
+        logger.debug('ws:upgrade');
       });
     }
 
@@ -84,7 +85,7 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
   }
 
   async disconnect(): Promise<void> {
-    console.log('debug: network:disconnect');
+    logger.debug('debug: network:disconnect');
 
     if (this.ws == null) {
       return;
@@ -94,15 +95,13 @@ class BergBridgeNetworkWS implements BergBridgeNetwork {
   }
 
   async send(message: BergBridgeNetworkMessage): Promise<void> {
-    console.log('debug: network:send');
+    logger.debug('debug: network:send');
 
     if (this.ws == null) {
       throw new Error('not connected, bailing');
     }
 
     const string = JSON.stringify(message);
-
-    // console.log('-> send', { string });
 
     this.ws.send(string, {
       compress: false,

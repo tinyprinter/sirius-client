@@ -3,6 +3,7 @@ import { PrintableImageHandler } from '../../printer/printable-image-wrapper';
 import areParametersValid from './are-parameters-valid';
 import fromParameters from './from-parameters';
 import { all } from '../../printer';
+import logger from '../../logger';
 
 export type PrinterConfiguration = {
   driver: string;
@@ -31,14 +32,18 @@ export default async (config: {
       all[printerConfig.driver.toLowerCase()];
 
     if (printerClass == null) {
-      console.log(
-        `can't find printer driver with name: ${printerConfig.driver}`
+      logger.error(
+        "can't find printer driver with name: %s",
+        printerConfig.driver
       );
       continue;
     }
 
     if (!areParametersValid(printerClass, printerConfig.parameters)) {
-      console.log(`invalid config for printer: ${printerConfig.driver}`);
+      logger.error(
+        'invalid config for printer: %s, skipping config',
+        printerConfig.driver
+      );
       continue;
     }
 

@@ -8,6 +8,7 @@ import BergDevice, {
 
 import payloadDecoder, { BergPrinterPayload } from './payload-decoder';
 import { BergDeviceCommandPayload } from '../payload-decoder';
+import logger from '../../../logger';
 
 const LITTLE_PRINTER_DEVICE_ID = 1;
 
@@ -63,28 +64,36 @@ class BergPrinter extends BaseBergDevice implements BergDevice {
       // how does "set delivery" differ? why wouldn't we print?
       case BergPrinterCommandName.SetDelivery:
       case BergPrinterCommandName.SetDeliveryNoFace:
-        console.log(
-          `warn: unhandled printer command: SetDelivery(NoFace) (${payload.header.command})`
+        logger.warn(
+          '[device #%s] unhandled printer command: SetDelivery(NoFace) (%d)',
+          this.parameters.address,
+          payload.header.command
         );
-
         break;
 
       case BergPrinterCommandName.SetPersonality:
       case BergPrinterCommandName.SetPersonalityWithMessage:
-        console.log(
-          `warn: unhandled printer command: SetPersonality(WithMessage) (${payload.header.command})`
+        logger.warn(
+          '[device #%s] unhandled printer command: SetPersonality(WithMessage) (%d)',
+          this.parameters.address,
+          payload.header.command
         );
-
         break;
 
       case BergPrinterCommandName.SetQuip:
-        console.log(
-          `warn: unhandled printer command: SetQuip (${payload.header.command})`
+        logger.warn(
+          '[device #%s] unhandled printer command: SetQuip (%d)',
+          this.parameters.address,
+          payload.header.command
         );
         break;
 
       default:
-        console.log(`warn: unknown printer command: ${payload.header.command}`);
+        logger.warn(
+          '[device #%s] unknown printer command (%d)',
+          this.parameters.address,
+          payload.header.command
+        );
         break;
     }
 

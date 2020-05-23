@@ -21,6 +21,7 @@ const BTSerialPortBinding = bindings('BluetoothSerialPort.node')
 
 import { TransportAdapter } from '../index';
 import Connection from './connection';
+import logger from '../../logger';
 
 export type BluetoothParameters = {
   address: string;
@@ -42,7 +43,12 @@ export default class implements TransportAdapter {
   }
 
   async connect(): Promise<void> {
-    console.log('...connecting bt');
+    logger.info(
+      '...connecting bt (%s, channel: %d)',
+      this.parameters.address,
+      this.parameters.channel
+    );
+
     const port = await new Promise<BluetoothSerialPortNative>(
       (resolve, reject) => {
         const port = new BTSerialPortBinding(

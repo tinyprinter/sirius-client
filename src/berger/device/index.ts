@@ -2,6 +2,7 @@ import * as pf from '../protocol-fragments';
 import { BergBridgeParamaters } from '../bridge';
 import BergDeviceCommand from '../commands/device-command';
 import payloadDecoder, { BergDeviceCommandPayload } from './payload-decoder';
+import logger from '../../logger';
 
 export type BergDeviceParameters = {
   address: string;
@@ -121,15 +122,17 @@ export abstract class BaseBergDevice implements BergDevice {
 
   private heartbeat = async (): Promise<void> => {
     if (!this.state.isOnline) {
-      console.log(
-        `[device #${this.parameters.address}] Connection is offline, sleeping heartbeat`
+      logger.verbose(
+        '[device #%s] Connection is offline, sleeping heartbeat',
+        this.parameters.address
       );
       return;
     }
 
     if (this.bridge == null) {
-      console.log(
-        `[device #${this.parameters.address}] No bridge parameters, sleeping heartbeat`
+      logger.verbose(
+        '[device #%s] No bridge parameters, sleeping heartbeat',
+        this.parameters.address
       );
       return;
     }
@@ -137,8 +140,9 @@ export abstract class BaseBergDevice implements BergDevice {
     const needsKey = this.state.encryptionKey == null;
 
     if (needsKey) {
-      console.log(
-        `[device #${this.parameters.address}] Asked for encryption key`
+      logger.debug(
+        '[device #%s] Asked for encryption key',
+        this.parameters.address
       );
       const message = pf.ENCRYPTION_KEY_REQUIRED(
         this.bridge.parameters.address,
@@ -147,7 +151,10 @@ export abstract class BaseBergDevice implements BergDevice {
 
       await this.bridge.send(message);
     } else {
-      console.log(`[device #${this.parameters.address}] Heartbeat. Pom pom.`);
+      logger.verbose(
+        '[device #%s] Heartbeat. Pom pom.',
+        this.parameters.address
+      );
       const message = pf.HEARTBEAT(
         this.bridge.parameters.address,
         this.parameters.address
@@ -161,8 +168,11 @@ export abstract class BaseBergDevice implements BergDevice {
     command: BergDeviceCommand
   ): Promise<BergDeviceCommandResponseJSON | null> {
     if (command.deviceAddress !== this.parameters.address) {
-      console.log(
-        `warn: device address does not match: sent (${command.deviceAddress}) !== us (${this.parameters.address})`
+      logger.warn(
+        '[device #%s] command address does not match: sent (%s) !== us (%s)',
+        this.parameters.address,
+        command.deviceAddress,
+        this.parameters.address
       );
 
       return this.makeCommandResponseWithCode(
@@ -176,8 +186,11 @@ export abstract class BaseBergDevice implements BergDevice {
     const payload = await payloadDecoder(buffer);
 
     if (payload.header.deviceId != this.deviceTypeId) {
-      console.log(
-        `warn: device ID does not match: sent (${payload.header.deviceId}) !== us (${this.deviceTypeId})`
+      logger.warn(
+        '[device #%s] device ID does not match: sent (%s) !== us (%s)',
+        this.parameters.address,
+        payload.header.deviceId,
+        this.deviceTypeId
       );
 
       return this.makeCommandResponseWithCode(
@@ -198,8 +211,9 @@ export abstract class BaseBergDevice implements BergDevice {
     commandId: number
   ): BergDeviceCommandResponseJSON | null {
     if (this.bridge == null) {
-      console.log(
-        `warn: printer got a payload, but doesn't have a bridge. bailing.`
+      logger.warn(
+        "[device #%s] device got a payload, but doesn't have a bridge. bailing.",
+        this.parameters.address
       );
       return null;
     }

@@ -2,6 +2,7 @@ import USB, { Device, OutEndpoint } from 'usb';
 import { promisify } from 'util';
 
 import { TransportAdapter } from '../index';
+import logger from '../../logger';
 
 export type USBParameters = {
   pid: number;
@@ -31,6 +32,14 @@ export default class implements TransportAdapter {
     if (this.parameters.vid == null || this.parameters.pid == null) {
       throw new Error('scanning for printers not (yet) supported');
     }
+
+    logger.info(
+      '...connecting usb (vid: %d (0x%s), pid: %d (0x%s))',
+      this.parameters.vid,
+      this.parameters.vid.toString(16),
+      this.parameters.pid,
+      this.parameters.pid.toString(16)
+    );
 
     this.device = USB.findByIds(this.parameters.vid, this.parameters.pid);
 
