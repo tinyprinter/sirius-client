@@ -10,6 +10,7 @@ import BergDeviceCommand, {
   BergDeviceCommandJSON,
 } from '../commands/device-command';
 import logger from '../../logger';
+import { promises as fs } from 'fs';
 
 export type BergBridgeParamaters = {
   address: string;
@@ -205,6 +206,18 @@ class BergBridge {
 
         case BergCommandType.DeviceCommand:
           {
+            if (false) {
+              // handy lil debug dump
+              const filename = `DeviceCommand.${Math.round(
+                new Date().getTime() / 1000
+              )}.json`;
+              logger.debug('writing command to file: %s', filename);
+              await fs.writeFile(
+                filename,
+                Buffer.from(JSON.stringify(message, null, 2))
+              );
+            }
+
             const json = assertType<BergDeviceCommandJSON>(message);
             const command = new BergDeviceCommand(json);
 
