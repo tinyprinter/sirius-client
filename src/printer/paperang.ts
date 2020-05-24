@@ -51,16 +51,17 @@ export default class PaperangPrinter implements PrintableImageHandler {
   }
 
   async print(image: PrintableImage): Promise<boolean> {
-    // image.resize(this.parameters.image.width);
-    // try {
-    //   await this.write(
-    //     await paperang.image(await image.asBIN(), this.parameters.image.width), false
-    //   );
-    //   await this.write(await paperang.lineFeed(75));
-    // } catch (error) {
-    //   logger.error('uh oh: %O', error);
-    //   return false;
-    // }
+    image.resize(this.parameters.image.width);
+    try {
+      await this.write(
+        await paperang.image(await image.asBIN(), this.parameters.image.width),
+        false
+      );
+      await this.write(await paperang.lineFeed(75));
+    } catch (error) {
+      logger.error('uh oh: %O', error);
+      return false;
+    }
     return true;
   }
 
