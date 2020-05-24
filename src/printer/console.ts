@@ -1,4 +1,4 @@
-import termImg from 'term-img';
+import terminalImage from 'terminal-image';
 import { BergPrinterPayload } from '../berger/device/printer/payload-decoder';
 import PrintableImage from '../printable-image';
 import { PrintableImageHandler } from './printable-image-wrapper';
@@ -28,11 +28,17 @@ class Console implements PrintableImageHandler {
 
       // if we've come from a payload, it must be upside down
       if (payload != null) {
-        image.rotate(180).resize(752);
+        image.rotate(180).resize(750);
       }
 
-      const bitmap = await image.asPNG();
-      termImg(bitmap);
+      const png = await image.asPNG();
+      console.log(
+        await terminalImage.buffer(png, {
+          width: 70,
+          height: 50,
+          preserveAspectRatio: false,
+        })
+      );
 
       resolve(true);
     });

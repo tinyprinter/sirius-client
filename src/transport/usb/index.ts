@@ -57,7 +57,7 @@ export default class implements TransportAdapter {
 
     this.device.open();
 
-    await Promise.allSettled(
+    await Promise.all(
       this.device.interfaces.map(async (iface) => {
         const setAltSetting = promisify(iface.setAltSetting).bind(iface);
         try {

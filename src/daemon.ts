@@ -20,7 +20,7 @@ class Daemon {
     if (this.printers != null) {
       const printers = this.printers;
 
-      await Promise.allSettled(
+      await Promise.all(
         Object.keys(this.printers).map(
           async (key) => await printers[key].close()
         )
@@ -63,7 +63,7 @@ class Daemon {
     if (this.printers != null) {
       const printers = this.printers;
 
-      await Promise.allSettled(
+      await Promise.all(
         Object.keys(this.printers).map(
           async (key) => await printers[key].close()
         )
@@ -88,7 +88,7 @@ class Daemon {
           // TODO: filter by only printers actively used by devices, not just present in config
           const printers = this.printers;
 
-          await Promise.allSettled(
+          await Promise.all(
             Object.keys(this.printers).map(
               async (key) => await printers[key].open()
             )
