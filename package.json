@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dist": "ttsc -p .",
-    "distfiles": "yarn copyfiles ./bin/cli.sh ./dist/bin/; yarn copyfiles ./package.json ./dist/; yarn copyfiles ./config/* ./dist/",
+    "distfiles": "yarn copyfiles ./bin/cli.sh ./package.json ./config/* ./dist/",
     "ts-exec": "ts-node --compiler ttypescript",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",

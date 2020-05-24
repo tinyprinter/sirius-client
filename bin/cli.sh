@@ -4,12 +4,12 @@ PATH_TO_SCRIPT=$(dirname $0)
 
 if [ -f "${PATH_TO_SCRIPT}/cli.ts" ]; then
   export TS_NODE_COMPILER=ttypescript
-  node -r ts-node/register "${PATH_TO_SCRIPT}/cli.ts" $@
+  node -r ts-node/register "${PATH_TO_SCRIPT}/cli.ts" "$@"
   exit $?
 fi
 
 if [ -f "${PATH_TO_SCRIPT}/cli.js" ]; then
-  node "${PATH_TO_SCRIPT}/cli.js" args $@
+  node "${PATH_TO_SCRIPT}/cli.js" "$@"
   exit $?
 fi
 
