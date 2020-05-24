@@ -1,4 +1,4 @@
-import USB, { Device, OutEndpoint } from 'usb';
+import USB, { Device, OutEndpoint, InEndpoint } from 'usb';
 import { promisify } from 'util';
 
 import { TransportAdapter } from '../index';
@@ -18,7 +18,9 @@ export default class implements TransportAdapter {
   private parameters: USBParameters;
 
   private device: Device | undefined;
-  private endpoint: OutEndpoint | undefined;
+
+  private in: InEndpoint | undefined;
+  private out: OutEndpoint | undefined;
 
   constructor(parameters: USBParameters) {
     this.parameters = parameters;
@@ -65,31 +67,64 @@ export default class implements TransportAdapter {
       })
     );
 
-    this.endpoint = this.device.interfaces.flatMap((iface) =>
+    this.in = this.device.interfaces.flatMap((iface) =>
+      iface.endpoints.filter((endpoint) => endpoint.direction === 'in')
+    )[0] as InEndpoint;
+
+    this.out = this.device.interfaces.flatMap((iface) =>
       iface.endpoints.filter((endpoint) => endpoint.direction === 'out')
     )[0] as OutEndpoint;
 
-    if (this.endpoint == null) {
-      throw new Error('could not find valid endpoint for printer');
+    if (this.out == null || this.in == null) {
+      throw new Error('could not find valid in/out endpoints for printer');
     }
+
+    this.in.startPoll();
   }
 
   async disconnect(): Promise<void> {
-    if (this.device) {
-      this.device.close();
+    if (this.in != null) {
+      await promisify(this.in.stopPoll).bind(this.in)();
     }
 
+    this.device?.close();
+
     this.device = undefined;
-    this.endpoint = undefined;
+    this.out = undefined;
+    this.in = undefined;
   }
 
   async write(buffer: Buffer): Promise<void> {
-    if (this.endpoint == null) {
-      return;
+    if (this.out == null) {
+      throw new Error('"out" endpoint not set');
     }
 
-    const transfer = promisify(this.endpoint.transfer).bind(this.endpoint);
+    const transfer = promisify(this.out.transfer).bind(this.out);
 
     await transfer(buffer);
+  }
+
+  async read(): Promise<Buffer> {
+    if (this.in == null) {
+      throw new Error('"in" endpoint not set');
+    }
+
+    return new Promise((resolve, reject) => {
+      if (this.in == null) {
+        return reject(new Error('"in" endpoint not set'));
+      }
+
+      const listener = (buffer: Buffer): void => {
+        // if there's an empty buffer, let's skip and resubscribe until there's data
+        if (buffer.length === 0) {
+          this.in?.once('data', listener);
+          return;
+        }
+
+        resolve(buffer);
+      };
+
+      this.in.once('data', listener);
+    });
   }
 }

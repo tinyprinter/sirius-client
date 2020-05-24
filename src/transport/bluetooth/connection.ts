@@ -8,22 +8,19 @@ export default class {
   constructor(port: BluetoothSerialPortNative, address: string) {
     this.port = port;
     this.address = address;
-
-    // TODO: watch for incoming data blobs
-    const read = (): void => {
-      if (this.port != null) {
-        this.port.read((err, chunk) => {
-          process.nextTick(read);
-          // self.emit('data', chunk);
-        });
-      }
-    };
-
-    read();
   }
 
   get isOpen(): boolean {
     return this.port == null;
+  }
+
+  async read(): Promise<Buffer> {
+    if (this.port == null) {
+      throw new Error('no port to write from');
+    }
+
+    const read = promisify(this.port.read).bind(this.port);
+    return await read();
   }
 
   async write(buffer: Buffer): Promise<void> {

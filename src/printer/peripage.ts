@@ -41,6 +41,24 @@ export default class PeripagePrinter implements PrintableImageHandler {
     await this.transport.connect();
 
     await this.write(await peripage.handshake());
+
+    await this.write(await peripage.queryVersion());
+    logger.verbose(
+      'printer version: %s',
+      (await this.transport.read()).toString('ascii')
+    );
+
+    await this.write(await peripage.querySerialNumber());
+    logger.verbose(
+      'printer serial number: %s',
+      (await this.transport.read()).toString('ascii')
+    );
+
+    await this.write(await peripage.queryModel());
+    logger.verbose(
+      'printer model: %s',
+      (await this.transport.read()).toString('ascii')
+    );
   }
 
   async close(): Promise<void> {

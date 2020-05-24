@@ -5,6 +5,7 @@ export interface TransportAdapter {
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   write(bytes: Buffer): Promise<void>;
+  read(): Promise<Buffer>;
 }
 
 export type TransportConfiguration =

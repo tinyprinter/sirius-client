@@ -7,7 +7,8 @@ export declare class BluetoothSerialPortNative {
     success: () => void,
     error: (error?: Error) => void
   );
-  read(callback: (error?: Error, buffer?: Buffer) => void): void;
+  read(callback: (error: Error, buffer?: Buffer) => void): void;
+  read(callback: (error: Error | undefined, buffer: Buffer) => void): void;
   write(
     buffer: Buffer,
     address: string,
@@ -82,5 +83,23 @@ export default class implements TransportAdapter {
     );
 
     await this.connection?.write(buffer);
+  }
+
+  async read(): Promise<Buffer> {
+    if (this.connection == null) {
+      throw new Error('no bluetooth connection found!');
+    }
+
+    logger.debug('...reading bt (%s)', this.parameters.address);
+
+    const result = await this.connection.read();
+
+    logger.debug(
+      '...reading bt (%s): got %d bytes',
+      this.parameters.address,
+      result.length
+    );
+
+    return result;
   }
 }
