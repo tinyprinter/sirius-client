@@ -7,7 +7,7 @@ type CommandArguments = {};
 const commander: yargs.CommandModule<{}, CommandArguments> = {
   command: 'usb',
   describe: 'Scan for valid USB devices.',
-  handler: async (argv) => {
+  handler: async () => {
     logger.info('starting USB scan');
 
     try {

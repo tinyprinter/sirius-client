@@ -1,21 +1,22 @@
 import bindings from 'bindings';
 
-const { DeviceINQ } = bindings('BluetoothSerialPort.node');
+declare type ScanResult = {
+  address: string;
+  name: string;
+};
 
-// TODO: add typing - it's not exposed in the default type information
-export default class extends DeviceINQ {
-  async scan(): Promise<object[]> {
-    const list: object[] = [];
-
-    return new Promise((resolve) => {
-      const found = (address: string, name: string): void => {
-        list.push({ address, name });
-      };
-      const finish = (): void => {
-        resolve(list);
-      };
-
-      this.inquire(found, finish);
-    });
-  }
+export declare class DeviceINQNative {
+  constructor();
+  inquire(
+    callback: (error: Error | undefined, devices: ScanResult[]) => void
+  ): void;
+  findSerialPortChannel(
+    address: string,
+    callback: (channel: number) => void
+  ): void;
 }
+
+const DeviceINQ = bindings('BluetoothSerialPort.node')
+  .DeviceINQ as typeof DeviceINQNative;
+
+export default class extends DeviceINQ {}
