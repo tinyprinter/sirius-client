@@ -40,8 +40,6 @@ const fetchStringDescriptor = async (
         resolve(string.replace(/\0/g, ''));
       });
     } catch (error) {
-      logger.error(error);
-
       // we want ~a~ value, so send something back
       resolve(undefined);
     }
