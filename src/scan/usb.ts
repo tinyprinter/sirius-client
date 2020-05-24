@@ -1,5 +1,6 @@
 import usb, { LIBUSB_CLASS_PRINTER } from 'usb';
 import { assertType } from 'typescript-is';
+import logger from '../logger';
 
 type FoundUSBDevice = {
   vid: number;
@@ -18,29 +19,32 @@ const fetchStringDescriptor = async (
   }
 
   return new Promise((resolve, reject) => {
-    device.open();
+    try {
+      device.open();
 
-    device.getStringDescriptor(descriptor, (error, result) => {
-      device.close();
+      device.getStringDescriptor(descriptor, (error, result) => {
+        device.close();
 
-      if (error != null) {
-        return reject(error);
-      }
+        if (error != null) {
+          return reject(error);
+        }
 
-      if (result == null) {
-        return resolve(undefined);
-      }
+        if (result == null) {
+          return resolve(undefined);
+        }
 
-      try {
         // note, the argument is actually a string, not a buffer, so we'll cast it over
         const string = assertType<string>(result);
 
         // the string is padded with null bytes out of the buffer, so we'll need to deal with that
         resolve(string.replace(/\0/g, ''));
-      } catch (error) {
-        reject(error);
-      }
-    });
+      });
+    } catch (error) {
+      logger.error(error);
+
+      // we want ~a~ value, so send something back
+      resolve(undefined);
+    }
   });
 };
 
