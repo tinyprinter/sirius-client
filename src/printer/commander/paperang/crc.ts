@@ -14,7 +14,7 @@ class CRC {
     this.initialise();
   }
 
-  private initialise = () => {
+  private initialise = (): void => {
     for (let i = 0; i < 256; i++) {
       let e = i;
       for (let eb = 0; eb < 8; eb++) {
@@ -25,7 +25,7 @@ class CRC {
   };
 
   private getBytes = (int: number): Buffer => {
-    var b = Buffer.alloc(4);
+    const b = Buffer.alloc(4);
     b[0] = int;
     b[1] = int >> 8;
     b[2] = int >> 16;
