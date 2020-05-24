@@ -16,6 +16,7 @@
     "@types/bindings": "^1.3.0",
     "@types/gm": "^1.18.8",
     "@types/jest": "^25.1.4",
+    "@types/js-yaml": "^3.12.4",
     "@types/ndarray": "^1.0.8",
     "@types/node": "^14.0.1",
     "@types/python-struct": "^1.0.0",
@@ -37,7 +38,6 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@types/js-yaml": "^3.12.4",
     "binary-parser": "^1.4.0",
     "bindings": "^1.5.0",
     "bluetooth-serial-port": "https://github.com/notjosh/node-bluetooth-serial-port.git#4096ebf6773d4dab0fa720f5a933ba90280a78a8",
