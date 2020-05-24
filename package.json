@@ -40,7 +40,7 @@
     "@types/js-yaml": "^3.12.4",
     "binary-parser": "^1.4.0",
     "bindings": "^1.5.0",
-    "bluetooth-serial-port": "https://github.com/notjosh/node-bluetooth-serial-port.git#76dc7c5fc41b2dcfa66004f28aea994e84c7341e",
+    "bluetooth-serial-port": "https://github.com/notjosh/node-bluetooth-serial-port.git#697d8827e710add3fa651ff20363399d9ed7e266",
     "copyfiles": "^2.2.0",
     "escpos": "^3.0.0-alpha.3",
     "fast-bmp": "^1.0.0",

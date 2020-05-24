@@ -1031,9 +1031,9 @@ bl@^4.0.1:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-"bluetooth-serial-port@https://github.com/notjosh/node-bluetooth-serial-port.git#76dc7c5fc41b2dcfa66004f28aea994e84c7341e":
+"bluetooth-serial-port@https://github.com/notjosh/node-bluetooth-serial-port.git#697d8827e710add3fa651ff20363399d9ed7e266":
   version "2.2.7"
-  resolved "https://github.com/notjosh/node-bluetooth-serial-port.git#76dc7c5fc41b2dcfa66004f28aea994e84c7341e"
+  resolved "https://github.com/notjosh/node-bluetooth-serial-port.git#697d8827e710add3fa651ff20363399d9ed7e266"
   dependencies:
     bindings "1.2.x"
     nan latest
