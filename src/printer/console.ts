@@ -34,8 +34,8 @@ class Console implements PrintableImageHandler {
       const png = await image.asPNG();
       console.log(
         await terminalImage.buffer(png, {
-          width: 70,
-          height: 50,
+          width: 60,
+          height: 40,
           preserveAspectRatio: false,
         })
       );
