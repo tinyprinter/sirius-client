@@ -40,7 +40,7 @@
   "dependencies": {
     "binary-parser": "^1.4.0",
     "bindings": "^1.5.0",
-    "bluetooth-serial-port": "https://github.com/notjosh/node-bluetooth-serial-port.git#4096ebf6773d4dab0fa720f5a933ba90280a78a8",
+    "bluetooth-serial-port": "https://github.com/notjosh/node-bluetooth-serial-port.git#28b97c877d7678520f4da15383b4fab6780bdd50",
     "copyfiles": "^2.2.0",
     "fast-bmp": "^1.0.0",
     "gm": "^1.23.1",
