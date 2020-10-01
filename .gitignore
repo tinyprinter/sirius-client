@@ -137,7 +137,7 @@ typings/
 # End of https://www.gitignore.io/api/git,node,macos
 
 
-build/
-config/
+
 dist/
-fixtures/personal/
+fixtures/fb1f6abb95f9b129.printer
+fixtures/0aaab8e735e378b4.printer
