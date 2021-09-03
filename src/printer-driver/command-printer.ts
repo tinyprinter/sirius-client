@@ -5,10 +5,21 @@ import path from 'path';
 import bitmapify from '../decoder/parser/bitmapify';
 import { spawn } from 'child_process';
 
-
+/**
+ * This class implements a spawning mechanism to print via any command / executable
+ * by providing the path to the created bitmap file. This can be used for example
+ * to print via a python script.
+ */
 export default class CommandPrinterDriver implements PrinterDriverInterface {
 
+  /**
+   * The Parameters that will be passed on to the command
+   */
   parameters: [string];
+  
+  /**
+   * The command to be executed
+   */
   command: string;
 
   constructor(command:string, parameters:[string] ){
@@ -16,6 +27,10 @@ export default class CommandPrinterDriver implements PrinterDriverInterface {
     this.command = command;
   }
 
+  /**
+   * @param buffer A Buffer object containing raw data encapsultated
+   * @returns The path to the created bitmap file.
+   */
   createImageFileFromBuffer(buffer: Buffer){
     const tempDir = path.join(os.tmpdir(), 'sirius-client');
     fs.mkdirSync(tempDir, { recursive: true });
@@ -32,8 +47,9 @@ export default class CommandPrinterDriver implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
     return new Promise<void>(resolve => {
       const imageFile = this.createImageFileFromBuffer(buffer);
-      this.parameters.push(imageFile);
-      const process = spawn(this.command, this.parameters);
+      const commandParams = [...this.parameters];
+      commandParams.push(imageFile);
+      const process = spawn(this.command, commandParams);
  
       process.stdout.on('data', function (data) {
         console.log('Pipe data from command ...');
