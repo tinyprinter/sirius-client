@@ -6,6 +6,7 @@ import Printer from './device/printer';
 import ConsolePrinterDriver from './printer-driver/console';
 import FilesystemPrinterDriver from './printer-driver/filesystem-printer';
 // import EscposPrinter from './printer-driver/escpos';
+import CommandPrinterDriver from './printer-driver/command-printer';
 // import StarPrinterDriver from './printer-driver/star';
 
 const readFile = promisify(fs.readFile);
@@ -101,6 +102,10 @@ export default async (
     // case 'escpos':
     //   printerDriver = new EscposPrinter();
     //   break;
+    case 'command':
+      // Example configuration for Command printer which uses a python script
+      printerDriver = new CommandPrinterDriver("python3", ['../python_print/main.py']);
+      break;
     // case 'star':
     //   printerDriver = new StarPrinterDriver();
     //   break;
