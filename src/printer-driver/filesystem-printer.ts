@@ -2,8 +2,7 @@ import { PrinterDriverInterface, PrintingResult } from '.';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-// import bitmapify from '../decoder/parser/bitmapify';
-// import termImg from 'term-img';
+import bitmapify from '../decoder/parser/bitmapify';
 
 export default class FilesystemPrinterDriver implements PrinterDriverInterface {
   async print(buffer: Buffer): Promise<PrintingResult> {
@@ -11,12 +10,11 @@ export default class FilesystemPrinterDriver implements PrinterDriverInterface {
       const tempDir = path.join(os.tmpdir(), 'sirius-client');
       fs.mkdirSync(tempDir, { recursive: true });
 
-      const tempFile = path.join(tempDir, 'to_print.bmp');
+      const name = new Date().toISOString().replace(/\D/g, '');
+      const tempFile = path.join(tempDir, `${name}.bmp`);
 
-      fs.writeFileSync(tempFile, buffer);
+      fs.writeFileSync(tempFile, bitmapify(buffer));
       console.log(`Written: ${tempFile}`);
-      // const bitmap = bitmapify(buffer);
-      //termImg(buffer);
       resolve();
     });
   }
